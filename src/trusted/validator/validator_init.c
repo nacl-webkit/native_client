@@ -4,6 +4,7 @@
  * found in the LICENSE file.
  */
 
+#include <assert.h>
 #include "native_client/src/shared/platform/nacl_log.h"
 #include "native_client/src/trusted/validator/ncvalidate.h"
 
@@ -16,29 +17,31 @@ void EmitExperimentalValidatorWarning(void) {
 }
 
 const struct NaClValidatorInterface *NaClCreateValidator(void) {
-#if NACL_ARCH(NACL_BUILD_ARCH) == NACL_arm
-  return NaClValidatorCreateArm();
-#elif NACL_ARCH(NACL_BUILD_ARCH) == NACL_mips
-  return NaClValidatorCreateMips();
-#elif NACL_ARCH(NACL_TARGET_ARCH) == NACL_x86
-# if NACL_TARGET_SUBARCH == 64
-#  if defined(NACL_VALIDATOR_RAGEL)
-  EmitExperimentalValidatorWarning();
-  return NaClDfaValidatorCreate_x86_64();
-#  else
-  return NaClValidatorCreate_x86_64();
-#  endif  /* defined(NACL_VALIDATOR_RAGEL) */
-# elif NACL_TARGET_SUBARCH == 32
-#  if defined(NACL_VALIDATOR_RAGEL)
-  EmitExperimentalValidatorWarning();
-  return NaClDfaValidatorCreate_x86_32();
-#  else
-  return NaClValidatorCreate_x86_32();
-#  endif  /* defined(NACL_VALIDATOR_RAGEL) */
-# else
-#  error "Invalid sub-architecture!"
-# endif
-#else  /* NACL_x86 */
-# error "There is no validator for this architecture!"
-#endif
+  assert(0);
+  return NaClValidatorInterface();
+//FIXME #if NACL_ARCH(NACL_BUILD_ARCH) == NACL_arm
+//FIXME   return NaClValidatorCreateArm();
+//FIXME #elif NACL_ARCH(NACL_BUILD_ARCH) == NACL_mips
+//FIXME   return NaClValidatorCreateMips();
+//FIXME #elif NACL_ARCH(NACL_TARGET_ARCH) == NACL_x86
+//FIXME # if NACL_TARGET_SUBARCH == 64
+//FIXME #  if defined(NACL_VALIDATOR_RAGEL)
+//FIXME   EmitExperimentalValidatorWarning();
+//FIXME   return NaClDfaValidatorCreate_x86_64();
+//FIXME #  else
+//FIXME   return NaClValidatorCreate_x86_64();
+//FIXME #  endif  /* defined(NACL_VALIDATOR_RAGEL) */
+//FIXME # elif NACL_TARGET_SUBARCH == 32
+//FIXME #  if defined(NACL_VALIDATOR_RAGEL)
+//FIXME   EmitExperimentalValidatorWarning();
+//FIXME   return NaClDfaValidatorCreate_x86_32();
+//FIXME #  else
+//FIXME   return NaClValidatorCreate_x86_32();
+//FIXME #  endif  /* defined(NACL_VALIDATOR_RAGEL) */
+//FIXME # else
+//FIXME #  error "Invalid sub-architecture!"
+//FIXME # endif
+//FIXME #else  /* NACL_x86 */
+//FIXME # error "There is no validator for this architecture!"
+//FIXME #endif
 }

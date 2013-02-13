@@ -6,6 +6,7 @@
 
 #include <time.h>
 #include <errno.h>
+#include <assert.h>
 
 #include "native_client/src/shared/platform/nacl_clock.h"
 
@@ -49,9 +50,10 @@ int NaClClockGetRes(nacl_clockid_t            clk_id,
       break;
   }
   if (0 == rv) {
-    if (0 != clock_getres(host_clk_id, &host_res)) {
-      rv = -NaClXlateErrno(errno);
-    }
+    assert(0);
+//FIXME    if (0 != clock_getres(host_clk_id, &host_res)) {
+//FIXME      rv = -NaClXlateErrno(errno);
+//FIXME    }
   }
   if (0 == rv) {
     res->tv_sec = host_res.tv_sec;
@@ -71,18 +73,20 @@ int NaClClockGetTime(nacl_clockid_t            clk_id,
   }
   switch (clk_id) {
     case NACL_CLOCK_REALTIME:
-      if (0 != clock_gettime(CLOCK_REALTIME, &host_time)) {
-        rv = -NaClXlateErrno(errno);
-      } else {
-        rv = 0;
-      }
+      assert(0);
+      //FIXME: if (0 != clock_gettime(CLOCK_REALTIME, &host_time)) {
+      //FIXME:   rv = -NaClXlateErrno(errno);
+      //FIXME: } else {
+      //FIXME:   rv = 0;
+      //FIXME: }
       break;
     case NACL_CLOCK_MONOTONIC:
-      if (0 != clock_gettime(CLOCK_MONOTONIC, &host_time)) {
-        rv = -NaClXlateErrno(errno);
-      } else {
-        rv = 0;
-      }
+      assert(0);
+      //FIXME: if (0 != clock_gettime(CLOCK_MONOTONIC, &host_time)) {
+      //FIXME:   rv = -NaClXlateErrno(errno);
+      //FIXME: } else {
+      //FIXME:   rv = 0;
+      //FIXME: }
       break;
     case NACL_CLOCK_PROCESS_CPUTIME_ID:
     case NACL_CLOCK_THREAD_CPUTIME_ID:

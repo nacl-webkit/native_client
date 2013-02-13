@@ -5,6 +5,7 @@
  */
 
 #include <string.h>
+#include <assert.h>
 
 /*
  * NaCl Simple/secure ELF loader (NaCl SEL).
@@ -29,7 +30,7 @@
 #include "native_client/src/trusted/desc/nacl_desc_io.h"
 #include "native_client/src/trusted/desc/nrd_xfer.h"
 #include "native_client/src/trusted/fault_injection/fault_injection.h"
-#include "native_client/src/trusted/fault_injection/test_injection.h"
+//FIXME #include "native_client/src/trusted/fault_injection/test_injection.h"
 #include "native_client/src/trusted/gio/gio_nacl_desc.h"
 #include "native_client/src/trusted/gio/gio_shm.h"
 #include "native_client/src/trusted/interval_multiset/nacl_interval_range_tree_intern.h"
@@ -433,9 +434,10 @@ void  NaClLoadTrampoline(struct NaClApp *nap) {
   }
 #endif
 #if NACL_ARCH(NACL_BUILD_ARCH) == NACL_x86 && NACL_BUILD_SUBARCH == 64
-  if (!NaClMakeDispatchThunk(nap)) {
-    NaClLog(LOG_FATAL, "NaClMakeDispatchThunk failed!\n");
-  }
+  assert(0);
+  //if (!NaClMakeDispatchThunk(nap)) {
+  //  NaClLog(LOG_FATAL, "NaClMakeDispatchThunk failed!\n");
+  //}
 #endif
   NaClFillTrampolineRegion(nap);
 
@@ -482,7 +484,7 @@ void  NaClLoadTrampoline(struct NaClApp *nap) {
                                 NACL_sys_second_tls_get));
 #endif
 
-  NACL_TEST_INJECTION(ChangeTrampolines, (nap));
+  //FIXME NACL_TEST_INJECTION(ChangeTrampolines, (nap));
 }
 
 void  NaClMemRegionPrinter(void                   *state,
@@ -1095,7 +1097,8 @@ static void NaClLoadModuleRpc(struct NaClSrpcRpc      *rpc,
   /*
    * Finish setting up the NaCl App.
    */
-  suberr = NaClAppPrepareToLaunch(nap);
+  //suberr = NaClAppPrepareToLaunch(nap);
+  assert(0);
 
   NaClXMutexLock(&nap->mu);
 

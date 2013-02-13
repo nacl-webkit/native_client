@@ -79,6 +79,7 @@
 #include "native_client/src/include/nacl_base.h"
 #include "native_client/src/include/portability.h"
 
+#include <assert.h>
 EXTERN_C_BEGIN
 
 /*
@@ -87,14 +88,16 @@ EXTERN_C_BEGIN
  * Must be called before going multithreaded.  Idempotent: repeated
  * calls ignored.
  */
-void NaClFaultInjectionModuleInit(void);
+//void NaClFaultInjectionModuleInit(void);
 
 /*
  * Private functions, to be used only by the macros below.  Not stable
  * ABI; may change.
  */
-int NaClFaultInjectionFaultP(char const *site_name);
-uintptr_t NaClFaultInjectionValue(void);
+//int NaClFaultInjectionFaultP(char const *site_name);
+//uintptr_t NaClFaultInjectionValue(void);
+#define NaClFaultInjectionFaultP(a) (void*)(a)
+#define NaClFaultInjectionValue() 0
 
 /*
  * Function to free per-thread counters.
@@ -104,13 +107,13 @@ uintptr_t NaClFaultInjectionValue(void);
  * function, so sans deeper integration with threading libraries
  * (e.g. platform), we cannot do the cleanup automatically.
  */
-void NaClFaultInjectionPreThreadExitCleanup(void);
+//void NaClFaultInjectionPreThreadExitCleanup(void);
 
 /*
  * Private test functions.
  */
-void NaClFaultInjectionModuleInternalInit(void);
-void NaClFaultInjectionModuleInternalFini(void);
+//void NaClFaultInjectionModuleInternalInit(void);
+//void NaClFaultInjectionModuleInternalFini(void);
 
 
 /*

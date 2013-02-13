@@ -72,7 +72,7 @@ int main(int ac, char **av) {
         return 1;
     }
   }
-  NaClFaultInjectionModuleInit();
+  //NaClFaultInjectionModuleInit();
 
   for (ix = 0; ix < limit; ++ix) {
     printf("%d\n", NACL_FI("test", FunctionThatMightFail(ix), -1));

@@ -118,15 +118,17 @@ static int TryShmOrTempOpen(size_t length, const char* prefix, bool use_temp) {
     if (use_temp) {
       m = open(name, O_RDWR | O_CREAT | O_EXCL, 0);
     } else {
-      m = shm_open(name, O_RDWR | O_CREAT | O_EXCL, 0);
+      assert(0);
+//FIXME      m = shm_open(name, O_RDWR | O_CREAT | O_EXCL, 0);
     }
     if (0 <= m) {
       if (use_temp) {
         int rc = unlink(name);
         DCHECK(rc == 0);
       } else {
-        int rc = shm_unlink(name);
-        DCHECK(rc == 0);
+        assert(0);
+//FIXME        int rc = shm_unlink(name);
+//FIXME        DCHECK(rc == 0);
       }
       if (ftruncate(m, length) == -1) {
         close(m);

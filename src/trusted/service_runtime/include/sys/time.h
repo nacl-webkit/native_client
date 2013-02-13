@@ -31,6 +31,21 @@ typedef int32_t   nacl_abi_suseconds_t;
 typedef long int  nacl_abi_clock_t;  /* to be deprecated */
 #endif
 
+#ifndef nacl_abi___time_t_defined
+#define nacl_abi___time_t_defined
+typedef int64_t       nacl_abi___time_t;
+typedef nacl_abi___time_t nacl_abi_time_t;
+
+struct nacl_abi_timespec {
+  nacl_abi_time_t tv_sec;
+#ifdef __native_client__
+  long int        tv_nsec;
+#else
+  int32_t         tv_nsec;
+#endif
+};
+#endif
+
 struct nacl_abi_timeval {
   nacl_abi_time_t      nacl_abi_tv_sec;
   nacl_abi_suseconds_t nacl_abi_tv_usec;

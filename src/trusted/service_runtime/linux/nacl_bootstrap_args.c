@@ -48,7 +48,7 @@ void NaClHandleBootstrapArgs(int *argc_p, char ***argv_p) {
 
   if (argc > 1 &&
       0 == strncmp(argv[1], kRDebugSwitch, sizeof(kRDebugSwitch) - 1)) {
-    NaClHandleRDebug(&argv[1][sizeof(kRDebugSwitch) - 1], argv[0]);
+    //NaClHandleRDebug(&argv[1][sizeof(kRDebugSwitch) - 1], argv[0]);
     --argc;
     ++argv;
   }

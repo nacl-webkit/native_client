@@ -7,6 +7,21 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <sys/mman.h>
+//FIXME from sdk header
+/* These are Linux-specific.  */
+#ifndef MAP_NORESERVE
+#ifdef __USE_MISC
+# define MAP_GROWSDOWN  0x00100     /* Stack-like segment.  */
+# define MAP_DENYWRITE  0x00800     /* ETXTBSY */
+# define MAP_EXECUTABLE 0x01000     /* Mark it as an executable.  */
+# define MAP_LOCKED 0x02000     /* Lock the mapping.  */
+# define MAP_NORESERVE  0x04000     /* Don't check for reservations.  */
+# define MAP_POPULATE   0x08000     /* Populate (prefault) pagetables.  */
+# define MAP_NONBLOCK   0x10000     /* Do not block on IO.  */
+# define MAP_STACK  0x20000     /* Allocation is for a stack.  */
+#endif
+#endif
+
 #include <sys/types.h>
 
 #include "native_client/src/shared/platform/nacl_find_addrsp.h"

@@ -29,4 +29,25 @@
 
 #define NACL_ABI_MAP_FAILED       ((void *) -1)
 
+//FIXME: to avoid compile error
+#ifndef PROT_NONE
+#define PROT_NONE   0
+#define PROT_READ   1
+#define PROT_WRITE  2
+#define PROT_EXEC   4
+#endif
+
+#ifndef MAP_SHARED
+#define MAP_SHARED       0x01  /* Share changes.  */
+#define MAP_PRIVATE      0x02  /* Changes are private.  */
+
+#define MAP_SHARING_MASK 0x03
+
+#define MAP_FIXED        0x10  /* Interpret addr exactly.  */
+#define MAP_ANON         0x20  /* Don't use a file.  */
+#define MAP_ANONYMOUS    MAP_ANON  /* Linux alias.  */
+
+#define MAP_FAILED       ((void *) -1)
+#endif
+
 #endif /* NATIVE_CLIENT_SRC_TRUSTED_SERVICE_RUNTIME_INCLUDE_BITS_MMAN_H_ */

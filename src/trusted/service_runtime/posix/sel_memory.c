@@ -28,6 +28,19 @@
 #include "native_client/src/trusted/service_runtime/nacl_config.h"
 #include "native_client/src/trusted/service_runtime/include/machine/_types.h"
 
+#ifndef MAP_GROWSDOWN
+#ifdef __USE_MISC
+# define MAP_GROWSDOWN  0x00100     /* Stack-like segment.  */
+# define MAP_DENYWRITE  0x00800     /* ETXTBSY */
+# define MAP_EXECUTABLE 0x01000     /* Mark it as an executable.  */
+# define MAP_LOCKED 0x02000     /* Lock the mapping.  */
+# define MAP_NORESERVE  0x04000     /* Don't check for reservations.  */
+# define MAP_POPULATE   0x08000     /* Populate (prefault) pagetables.  */
+# define MAP_NONBLOCK   0x10000     /* Do not block on IO.  */
+# define MAP_STACK  0x20000     /* Allocation is for a stack.  */
+#endif
+#endif
+
 void NaCl_page_free(void     *p,
                     size_t   size) {
   if (p == 0 || size == 0)

@@ -21,6 +21,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 
 #include "native_client/src/shared/gio/gio.h"
 #include "native_client/src/shared/imc/nacl_imc_c.h"
@@ -32,7 +33,7 @@
 #include "native_client/src/shared/srpc/nacl_srpc.h"
 
 #include "native_client/src/trusted/fault_injection/fault_injection.h"
-#include "native_client/src/trusted/fault_injection/test_injection.h"
+//FIXME #include "native_client/src/trusted/fault_injection/test_injection.h"
 #include "native_client/src/trusted/perf_counter/nacl_perf_counter.h"
 #include "native_client/src/trusted/service_runtime/env_cleanser.h"
 #include "native_client/src/trusted/service_runtime/include/sys/fcntl.h"
@@ -276,7 +277,8 @@ int NaClSelLdrMain(int argc, char **argv) {
         break;
 #if NACL_LINUX
       case 'D':
-        NaClHandleRDebug(optarg, argv[0]);
+        assert(0);
+        //NaClHandleRDebug(optarg, argv[0]);
         break;
 #endif
       case 'e':
@@ -679,7 +681,8 @@ int NaClSelLdrMain(int argc, char **argv) {
        * allocating segment selectors.  On x86-64 and ARM, this is
        * (currently) a no-op.
        */
-      errcode = NaClAppPrepareToLaunch(nap);
+      //errcode = NaClAppPrepareToLaunch(nap);
+      errcode = LOAD_STATUS_UNKNOWN; //FIXME
       if (LOAD_OK != errcode) {
         nap->module_load_status = errcode;
         fprintf(stderr, "NaClAppPrepareToLaunch returned %d", errcode);
@@ -801,7 +804,7 @@ int NaClSelLdrMain(int argc, char **argv) {
       goto done;
     }
   }
-  NACL_TEST_INJECTION(BeforeMainThreadLaunches, ());
+  //FIXME NACL_TEST_INJECTION(BeforeMainThreadLaunches, ());
   if (!NaClCreateMainThread(nap,
                             argc - optind,
                             argv + optind,

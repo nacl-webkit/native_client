@@ -13,6 +13,10 @@
 
 #include "native_client/src/trusted/service_runtime/include/bits/mman.h"
 
+////FIXME: to avoid compile error
+typedef long off_t;
+typedef unsigned long size_t;
+
 #ifdef __cplusplus
 extern "C" {
 #endif

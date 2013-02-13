@@ -561,7 +561,7 @@ int32_t NaClCreateAdditionalThread(struct NaClApp *nap,
 
 void NaClLoadTrampoline(struct NaClApp *nap);
 
-void NaClLoadSpringboard(struct NaClApp  *nap);
+//void NaClLoadSpringboard(struct NaClApp  *nap);
 
 static const uintptr_t kNaClBadAddress = (uintptr_t) -1;
 
@@ -648,7 +648,7 @@ NaClErrorCode NaClWaitForStartModuleCommand(struct NaClApp *nap) NACL_WUR;
  */
 void NaClBlockIfCommandChannelExists(struct NaClApp *nap);
 
-void NaClFillMemoryRegionWithHalt(void *start, size_t size);
+//void NaClFillMemoryRegionWithHalt(void *start, size_t size);
 
 void NaClFillTrampolineRegion(struct NaClApp *nap);
 
@@ -662,7 +662,7 @@ int NaClMakePcrelThunk(struct NaClApp *nap);
 
 #if NACL_ARCH(NACL_BUILD_ARCH) == NACL_x86 && NACL_BUILD_SUBARCH == 64
 
-int NaClMakeDispatchThunk(struct NaClApp *nap);
+//int NaClMakeDispatchThunk(struct NaClApp *nap);
 
 #endif
 
@@ -795,7 +795,7 @@ void NaClGdbHook(struct NaClApp const *nap);
 
 #if NACL_LINUX
 void NaClHandleBootstrapArgs(int *argc_p, char ***argv_p);
-void NaClHandleRDebug(const char *switch_value, char *argv0);
+//void NaClHandleRDebug(const char *switch_value, char *argv0);
 void NaClHandleReservedAtZero(const char *switch_value);
 #else
 static INLINE void NaClHandleBootstrapArgs(int *argc_p, char ***argv_p) {

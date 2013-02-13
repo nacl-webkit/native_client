@@ -9,6 +9,7 @@
  */
 
 #include <errno.h>
+#include <assert.h>
 
 #include "native_client/src/include/nacl_platform.h"
 #include "native_client/src/include/portability.h"
@@ -18,6 +19,13 @@
 #include "native_client/src/trusted/service_runtime/sel_memory.h"
 #include "native_client/src/trusted/service_runtime/sel_util.h"
 
+#ifndef MADV_NORMAL
+#define MADV_NORMAL     0
+#define MADV_RANDOM     1
+#define MADV_SEQUENTIAL 2
+#define MADV_WILLNEED   3
+#define MADV_DONTNEED   4
+#endif
 
 NaClErrorCode NaClAllocAddrSpaceAslr(struct NaClApp *nap,
                                      enum NaClAslrMode aslr_mode) {
@@ -31,70 +39,72 @@ NaClErrorCode NaClAllocAddrSpaceAslr(struct NaClApp *nap,
           "NaClAllocAddrSpace: calling NaClAllocateSpace(*,0x%016"
           NACL_PRIxS")\n",
           ((size_t) 1 << nap->addr_bits));
+  (void)aslr_mode;
+  assert(0);
 
-  rv = NaClAllocateSpaceAslr(&mem, (uintptr_t) 1U << nap->addr_bits,
-                             aslr_mode);
-  if (LOAD_OK != rv) {
-    return rv;
-  }
-
-  nap->mem_start = (uintptr_t) mem;
-  /*
-   * The following should not be NaClLog(2, ...) because logging with
-   * any detail level higher than LOG_INFO is disabled in the release
-   * builds.  This was to reduce logging overhead, so as to eliminate
-   * at least a function call as well as possibly a TLS/TSD read if
-   * module-specific logging verbosity level comparisons are needed.
-   */
-  NaClLog(LOG_INFO,
-          ("Native Client module will be loaded at"
-           " base address 0x%016"NACL_PRIxPTR"\n"),
-          nap->mem_start);
-
-  hole_start = NaClRoundAllocPage(nap->data_end);
-
-  if (nap->stack_size >= ((uintptr_t) 1U) << nap->addr_bits) {
-    NaClLog(LOG_FATAL, "NaClAllocAddrSpace: stack too large!");
-  }
-  stack_start = (((uintptr_t) 1U) << nap->addr_bits) - nap->stack_size;
-  stack_start = NaClTruncAllocPage(stack_start);
-
-  if (stack_start < hole_start) {
-    return LOAD_DATA_OVERLAPS_STACK_SECTION;
-  }
-
-  hole_size = stack_start - hole_start;
-  hole_size = NaClTruncAllocPage(hole_size);
-
-  /*
-   * mprotect and madvise unused data space to "free" it up, but
-   * retain mapping so no other memory can be mapped into those
-   * addresses.
-   */
-  if (hole_size == 0) {
-    NaClLog(2, ("NaClAllocAddrSpace: hole between end of data and"
-                " the beginning of stack is zero size.\n"));
-  } else {
-    NaClLog(2,
-            ("madvising 0x%08"NACL_PRIxPTR", 0x%08"NACL_PRIxS
-             ", MADV_DONTNEED\n"),
-            nap->mem_start + hole_start, hole_size);
-    if (0 != NaCl_madvise((void *) (nap->mem_start + hole_start),
-                          hole_size,
-                          MADV_DONTNEED)) {
-      NaClLog(1, "madvise, errno %d\n", errno);
-      return LOAD_MADVISE_FAIL;
-    }
-    NaClLog(2,
-            "mprotecting 0x%08"NACL_PRIxPTR", 0x%08"NACL_PRIxS", PROT_NONE\n",
-            nap->mem_start + hole_start, hole_size);
-    if (0 != NaCl_mprotect((void *) (nap->mem_start + hole_start),
-                           hole_size,
-                           PROT_NONE)) {
-      NaClLog(1, "mprotect, errno %d\n", errno);
-      return LOAD_MPROTECT_FAIL;
-    }
-  }
+//FIXME  rv = NaClAllocateSpaceAslr(&mem, (uintptr_t) 1U << nap->addr_bits,
+//FIXME                             aslr_mode);
+//FIXME  if (LOAD_OK != rv) {
+//FIXME    return rv;
+//FIXME  }
+//FIXME
+//FIXME  nap->mem_start = (uintptr_t) mem;
+//FIXME  /*
+//FIXME   * The following should not be NaClLog(2, ...) because logging with
+//FIXME   * any detail level higher than LOG_INFO is disabled in the release
+//FIXME   * builds.  This was to reduce logging overhead, so as to eliminate
+//FIXME   * at least a function call as well as possibly a TLS/TSD read if
+//FIXME   * module-specific logging verbosity level comparisons are needed.
+//FIXME   */
+//FIXME  NaClLog(LOG_INFO,
+//FIXME          ("Native Client module will be loaded at"
+//FIXME           " base address 0x%016"NACL_PRIxPTR"\n"),
+//FIXME          nap->mem_start);
+//FIXME
+//FIXME  hole_start = NaClRoundAllocPage(nap->data_end);
+//FIXME
+//FIXME  if (nap->stack_size >= ((uintptr_t) 1U) << nap->addr_bits) {
+//FIXME    NaClLog(LOG_FATAL, "NaClAllocAddrSpace: stack too large!");
+//FIXME  }
+//FIXME  stack_start = (((uintptr_t) 1U) << nap->addr_bits) - nap->stack_size;
+//FIXME  stack_start = NaClTruncAllocPage(stack_start);
+//FIXME
+//FIXME  if (stack_start < hole_start) {
+//FIXME    return LOAD_DATA_OVERLAPS_STACK_SECTION;
+//FIXME  }
+//FIXME
+//FIXME  hole_size = stack_start - hole_start;
+//FIXME  hole_size = NaClTruncAllocPage(hole_size);
+//FIXME
+//FIXME  /*
+//FIXME   * mprotect and madvise unused data space to "free" it up, but
+//FIXME   * retain mapping so no other memory can be mapped into those
+//FIXME   * addresses.
+//FIXME   */
+//FIXME  if (hole_size == 0) {
+//FIXME    NaClLog(2, ("NaClAllocAddrSpace: hole between end of data and"
+//FIXME                " the beginning of stack is zero size.\n"));
+//FIXME  } else {
+//FIXME    NaClLog(2,
+//FIXME            ("madvising 0x%08"NACL_PRIxPTR", 0x%08"NACL_PRIxS
+//FIXME             ", MADV_DONTNEED\n"),
+//FIXME            nap->mem_start + hole_start, hole_size);
+//FIXME    if (0 != NaCl_madvise((void *) (nap->mem_start + hole_start),
+//FIXME                          hole_size,
+//FIXME                          MADV_DONTNEED)) {
+//FIXME      NaClLog(1, "madvise, errno %d\n", errno);
+//FIXME      return LOAD_MADVISE_FAIL;
+//FIXME    }
+//FIXME    NaClLog(2,
+//FIXME            "mprotecting 0x%08"NACL_PRIxPTR", 0x%08"NACL_PRIxS", PROT_NONE\n",
+//FIXME            nap->mem_start + hole_start, hole_size);
+//FIXME    if (0 != NaCl_mprotect((void *) (nap->mem_start + hole_start),
+//FIXME                           hole_size,
+//FIXME                           PROT_NONE)) {
+//FIXME      NaClLog(1, "mprotect, errno %d\n", errno);
+//FIXME      return LOAD_MPROTECT_FAIL;
+//FIXME    }
+//FIXME  }
 
   return LOAD_OK;
 }
@@ -293,5 +303,8 @@ NaClErrorCode NaClMemoryProtection(struct NaClApp *nap) {
 }
 
 NaClErrorCode NaClAllocateSpace(void **mem, size_t addrsp_size) {
-  return NaClAllocateSpaceAslr(mem, addrsp_size, 1);
+  assert(0);
+  (void**)mem; (void)addrsp_size;
+  return LOAD_OK;
+//  return NaClAllocateSpaceAslr(mem, addrsp_size, 1);
 }

@@ -10,6 +10,7 @@
 #include <string.h>
 #include <sys/mman.h>
 #include <unistd.h>
+#include <assert.h>
 
 #include "native_client/src/include/nacl_macros.h"
 #include "native_client/src/shared/platform/nacl_check.h"
@@ -284,80 +285,83 @@ static int DispatchToUntrustedHandler(struct NaClAppThread *natp,
 }
 
 static void SignalCatch(int sig, siginfo_t *info, void *uc) {
-  struct NaClSignalContext sig_ctx;
-  int is_untrusted;
-  struct NaClAppThread *natp;
-
-#if NACL_ARCH(NACL_BUILD_ARCH) == NACL_x86
-  /*
-   * Reset the x86 direction flag.  New versions of gcc and libc
-   * assume that the direction flag is clear on entry to a function,
-   * as the x86 ABI requires.  However, untrusted code can set this
-   * flag, and versions of Linux before 2.6.25 do not clear the flag
-   * before running the signal handler, so we clear it here for safety.
-   * See http://code.google.com/p/nativeclient/issues/detail?id=1495
-   */
-  __asm__("cld");
-#endif
-
-  NaClSignalContextFromHandler(&sig_ctx, uc);
-  NaClSignalContextGetCurrentThread(&sig_ctx, &is_untrusted, &natp);
-
-#if NACL_ARCH(NACL_BUILD_ARCH) == NACL_x86 && NACL_BUILD_SUBARCH == 32
-  /*
-   * On Linux, the kernel does not restore %gs when entering the
-   * signal handler, so we must do that here.  We need to do this for
-   * TLS to work and for glibc's syscall wrappers to work, because
-   * some builds of glibc fetch a syscall function pointer from the
-   * static TLS area.  There is the potential for vulnerabilities if
-   * we call glibc without restoring %gs (such as
-   * http://code.google.com/p/nativeclient/issues/detail?id=1607),
-   * although the risk is reduced because the untrusted %gs segment
-   * has an extent of only 4 bytes (see
-   * http://code.google.com/p/nativeclient/issues/detail?id=2176).
-   *
-   * Note that, in comparison, Breakpad tries to avoid using libc
-   * calls at all when a crash occurs.
-   *
-   * On Mac OS X, the kernel *does* restore the original %gs when
-   * entering the signal handler.  Our assignment to %gs here is
-   * therefore not strictly necessary, but not harmful.  However, this
-   * does mean we need to check the original %gs value (from the
-   * signal frame) rather than the current %gs value (from
-   * NaClGetGs()).
-   *
-   * Both systems necessarily restore %cs, %ds, and %ss otherwise we
-   * would have a hard time handling signals in untrusted code at all.
-   *
-   * Note that we check natp (which is based on %gs) rather than
-   * is_untrusted (which is based on %cs) because we need to handle
-   * the case where %gs is set to the untrusted-code value but %cs is
-   * not.
-   */
-  if (natp != NULL) {
-    NaClSetGs(natp->user.trusted_gs);
-  }
-#endif
-
-#if NACL_LINUX
-  if (sig != SIGINT && sig != SIGQUIT) {
-    if (NaClThreadSuspensionSignalHandler(sig, &sig_ctx, is_untrusted, natp)) {
-      NaClSignalContextToHandler(uc, &sig_ctx);
-      /* Resume untrusted code using possibly modified register state. */
-      return;
-    }
-  }
-#endif
-
-  if (is_untrusted && sig == SIGSEGV) {
-    if (DispatchToUntrustedHandler(natp, &sig_ctx)) {
-      NaClSignalContextToHandler(uc, &sig_ctx);
-      /* Resume untrusted code using the modified register state. */
-      return;
-    }
-  }
-
-  FindAndRunHandler(sig, info, uc);
+  //FIXME: NaClSignalContextFromHandler() below has plaform dependency
+  assert(0);
+  (void)sig; (void*)info; (void*)uc;
+//  struct NaClSignalContext sig_ctx;
+//  int is_untrusted;
+//  struct NaClAppThread *natp;
+//
+//#if NACL_ARCH(NACL_BUILD_ARCH) == NACL_x86
+//  /*
+//   * Reset the x86 direction flag.  New versions of gcc and libc
+//   * assume that the direction flag is clear on entry to a function,
+//   * as the x86 ABI requires.  However, untrusted code can set this
+//   * flag, and versions of Linux before 2.6.25 do not clear the flag
+//   * before running the signal handler, so we clear it here for safety.
+//   * See http://code.google.com/p/nativeclient/issues/detail?id=1495
+//   */
+//  __asm__("cld");
+//#endif
+//
+//  NaClSignalContextFromHandler(&sig_ctx, uc);
+//  NaClSignalContextGetCurrentThread(&sig_ctx, &is_untrusted, &natp);
+//
+//#if NACL_ARCH(NACL_BUILD_ARCH) == NACL_x86 && NACL_BUILD_SUBARCH == 32
+//  /*
+//   * On Linux, the kernel does not restore %gs when entering the
+//   * signal handler, so we must do that here.  We need to do this for
+//   * TLS to work and for glibc's syscall wrappers to work, because
+//   * some builds of glibc fetch a syscall function pointer from the
+//   * static TLS area.  There is the potential for vulnerabilities if
+//   * we call glibc without restoring %gs (such as
+//   * http://code.google.com/p/nativeclient/issues/detail?id=1607),
+//   * although the risk is reduced because the untrusted %gs segment
+//   * has an extent of only 4 bytes (see
+//   * http://code.google.com/p/nativeclient/issues/detail?id=2176).
+//   *
+//   * Note that, in comparison, Breakpad tries to avoid using libc
+//   * calls at all when a crash occurs.
+//   *
+//   * On Mac OS X, the kernel *does* restore the original %gs when
+//   * entering the signal handler.  Our assignment to %gs here is
+//   * therefore not strictly necessary, but not harmful.  However, this
+//   * does mean we need to check the original %gs value (from the
+//   * signal frame) rather than the current %gs value (from
+//   * NaClGetGs()).
+//   *
+//   * Both systems necessarily restore %cs, %ds, and %ss otherwise we
+//   * would have a hard time handling signals in untrusted code at all.
+//   *
+//   * Note that we check natp (which is based on %gs) rather than
+//   * is_untrusted (which is based on %cs) because we need to handle
+//   * the case where %gs is set to the untrusted-code value but %cs is
+//   * not.
+//   */
+//  if (natp != NULL) {
+//    NaClSetGs(natp->user.trusted_gs);
+//  }
+//#endif
+//
+//#if NACL_LINUX
+//  if (sig != SIGINT && sig != SIGQUIT) {
+//    if (NaClThreadSuspensionSignalHandler(sig, &sig_ctx, is_untrusted, natp)) {
+//      NaClSignalContextToHandler(uc, &sig_ctx);
+//      /* Resume untrusted code using possibly modified register state. */
+//      return;
+//    }
+//  }
+//#endif
+//
+//  if (is_untrusted && sig == SIGSEGV) {
+//    if (DispatchToUntrustedHandler(natp, &sig_ctx)) {
+//      NaClSignalContextToHandler(uc, &sig_ctx);
+//      /* Resume untrusted code using the modified register state. */
+//      return;
+//    }
+//  }
+//
+//  FindAndRunHandler(sig, info, uc);
 }
 
 

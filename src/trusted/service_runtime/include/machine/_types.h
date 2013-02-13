@@ -12,6 +12,12 @@
 #ifndef NATIVE_CLIENT_SRC_TRUSTED_SERVICE_RUNTIME_INCLUDE_MACHINE__TYPES_H_
 #define NATIVE_CLIENT_SRC_TRUSTED_SERVICE_RUNTIME_INCLUDE_MACHINE__TYPES_H_
 
+//FIXME: to avoid compile error
+typedef long int int64_t;
+typedef int int32_t;
+typedef unsigned long uint64_t;
+typedef unsigned int  uint32_t;
+
 #ifdef __native_client__
 # include <stdint.h>
 # include <machine/_default_types.h>

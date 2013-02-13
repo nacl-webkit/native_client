@@ -14,6 +14,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <assert.h>
 
 #include "native_client/src/shared/platform/nacl_exit.h"
 #include "native_client/src/shared/platform/nacl_log.h"
@@ -66,7 +67,8 @@ static void HandleStackContext(struct NaClAppThread *natp,
    * for control to have reached here, because nacl_syscall*.S writes
    * to the stack.
    */
-  sp_user = NaClGetThreadCtxSp(&natp->user);
+  assert(0);
+  //sp_user = NaClGetThreadCtxSp(&natp->user);
   sp_sys = NaClUserToSysStackAddr(nap, sp_user);
   /*
    * Get the trampoline return address.  This just tells us which
@@ -176,7 +178,8 @@ NORETURN void NaClSyscallCSegHook(int32_t tls_idx) {
                                NACL_APP_THREAD_UNTRUSTED);
   NaClStackSafetyNowOnUntrustedStack();
 
-  NaClSwitchToApp(natp);
+  assert(0);
+  //NaClSwitchToApp(natp);
   /* NOTREACHED */
 
   fprintf(stderr, "NORETURN NaClSwitchToApp returned!?!\n");

@@ -47,7 +47,24 @@ typedef int64_t nacl_off64_t;
  * compatible w/ nacl_off64_t above.
  */
 #if NACL_LINUX
-typedef struct stat64 nacl_host_stat_t;
+//FIXME: to avoid compile error
+struct stat64_fixme {
+//    dev_t     st_dev;     /* id of device containing file */
+//    ino_t     st_ino;     /* inode number */
+    unsigned int st_mode;    /* protection */
+    unsigned int st_nlink;   /* number of hard links */
+//    uid_t     st_uid;     /* user id of owner */
+//    gid_t     st_gid;     /* group id of owner */
+//    dev_t     st_rdev;    /* device id (if special file) */
+    long st_size;    /* total size, in bytes */
+//    blksize_t st_blksize; /* blocksize for file system i/o */
+//    blkcnt_t  st_blocks;  /* number of 512b blocks allocated */
+//    time_t  st_atime;   /* time of last access */
+//    time_t  st_mtime;   /* time of last modification */
+//    time_t  st_ctime;   /* time of last status change */
+};
+typedef struct stat64_fixme nacl_host_stat_t;
+//typedef struct stat64 nacl_host_stat_t;
 #elif NACL_OSX
 typedef struct stat nacl_host_stat_t;
 #elif NACL_WINDOWS

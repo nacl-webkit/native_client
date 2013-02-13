@@ -5,6 +5,7 @@
  */
 
 #include <string.h>
+#include <assert.h>
 
 #include "native_client/src/include/concurrency_ops.h"
 #include "native_client/src/include/nacl_platform.h"
@@ -465,7 +466,8 @@ static void MakeDynamicCodePagesVisible(struct NaClApp *nap,
   /* Sanity check:  Ensure the page is not already in use. */
   CHECK(*writable_addr == 0);
 
-  NaClFillMemoryRegionWithHalt(writable_addr, size);
+  assert(0);
+  //NaClFillMemoryRegionWithHalt(writable_addr, size);
 
   if (NaCl_mprotect(user_addr, size, PROT_READ | PROT_EXEC) != 0) {
     NaClLog(LOG_FATAL, "MakeDynamicCodePageVisible: NaCl_mprotect() failed\n");
