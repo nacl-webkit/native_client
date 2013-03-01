@@ -1,0 +1,38 @@
+set(NACL_BOOTSTRAP_LIBRARY_NAME nacl_bootstrap_lib)
+set(NACL_BOOTSTRAP_MUNGE_PHDR_NAME nacl_bootstrap_munge_phdr)
+set(NACL_BOOTSTRAP_RAW nacl_bootstrap_raw)
+set(NACL_HELPER_BOOTSTRAP nacl_helper_bootstrap)
+
+include(TargetArch)
+
+target_architecture(TARGET_ARCH)
+
+if (${TARGET_ARCH} STREQUAL "x86_64")
+  set(NACL_RESERVE_TOP 0x0)
+  set(LINKER_EMULATION elf_x86_64) 
+elseif (${TARGET_ARCH} STREQUAL "i386")
+  set(NACL_RESERVE_TOP 0x40000000)
+  set(LINKER_EMULATION elf_i386) 
+elseif (${TARGET_ARCH} MATCHES "^arm*")
+  set(NACL_RESERVE_TOP 0x40002000)
+  set(LINKER_EMULATION armelf_linux_eabi)
+else ()
+  message(FATAL_ERROR "Unsupported arch $TARGET_ARCH}")
+endif ()
+
+add_library(${NACL_BOOTSTRAP_LIBRARY_NAME} STATIC "nacl_bootstrap.c")
+set_target_properties(${NACL_BOOTSTRAP_LIBRARY_NAME} PROPERTIES INCLUDE_DIRECTORIES ${CMAKE_SOURCE_DIR}/Source/chrome_deps)
+set_target_properties(${NACL_BOOTSTRAP_LIBRARY_NAME} PROPERTIES COMPILE_FLAGS "-fno-builtin -fno-stack-protector -fno-pic -fno-PIC -fno-pie -fno-PIE")
+
+add_executable(${NACL_BOOTSTRAP_MUNGE_PHDR_NAME} "nacl_bootstrap_munge_phdr.c")
+target_link_libraries(${NACL_BOOTSTRAP_MUNGE_PHDR_NAME} "-lelf") 
+
+add_custom_target(${NACL_BOOTSTRAP_RAW} ALL
+    COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/ld_bfd.py --compiler g++ -m ${LINKER_EMULATION} --build-id -static --defsym RESERVE_TOP=${NACL_RESERVE_TOP} --script=${CMAKE_CURRENT_SOURCE_DIR}/nacl_bootstrap.x -o ${CMAKE_BINARY_DIR}/bin/${NACL_BOOTSTRAP_RAW} -z max-page-size=0x1000 --whole-archive ${CMAKE_BINARY_DIR}/lib/lib${NACL_BOOTSTRAP_LIBRARY_NAME}.a --no-whole-archive
+    DEPENDS ${NACL_BOOTSTRAP_LIBRARY_NAME}
+)
+
+add_custom_target(${NACL_HELPER_BOOTSTRAP} ALL
+    COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/nacl_bootstrap_munge_phdr.py ${CMAKE_BINARY_DIR}/bin/${NACL_BOOTSTRAP_MUNGE_PHDR_NAME} ${CMAKE_BINARY_DIR}/bin/${NACL_BOOTSTRAP_RAW} ${CMAKE_BINARY_DIR}/bin/${NACL_HELPER_BOOTSTRAP}
+    DEPENDS ${NACL_BOOTSTRAP_RAW} ${NACL_BOOTSTRAP_MUNGE_PHDR_NAME}
+)
