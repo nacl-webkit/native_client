@@ -3,26 +3,14 @@ set(NACL_BOOTSTRAP_MUNGE_PHDR_NAME nacl_bootstrap_munge_phdr)
 set(NACL_BOOTSTRAP_RAW nacl_bootstrap_raw)
 set(NACL_HELPER_BOOTSTRAP nacl_helper_bootstrap)
 
-include(TargetArch)
-
-target_architecture(TARGET_ARCH)
-
-if (${TARGET_ARCH} STREQUAL "x86_64")
-  set(NACL_RESERVE_TOP 0x0)
-  set(LINKER_EMULATION elf_x86_64) 
-elseif (${TARGET_ARCH} STREQUAL "i386")
-  set(NACL_RESERVE_TOP 0x40000000)
-  set(LINKER_EMULATION elf_i386) 
-elseif (${TARGET_ARCH} MATCHES "^arm*")
-  set(NACL_RESERVE_TOP 0x40002000)
-  set(LINKER_EMULATION armelf_linux_eabi)
-else ()
-  message(FATAL_ERROR "Unsupported arch $TARGET_ARCH}")
-endif ()
+include(${NATIVE_CLIENT_DIR}/common.txt)
 
 include_directories("${CMAKE_SOURCE_DIR}/Source/chrome_deps")
 add_library(${NACL_BOOTSTRAP_LIBRARY_NAME} STATIC "nacl_bootstrap.c")
-set_target_properties(${NACL_BOOTSTRAP_LIBRARY_NAME} PROPERTIES COMPILE_FLAGS "-fno-builtin -fno-stack-protector -fno-pic -fno-PIC -fno-pie -fno-PIE")
+set_target_properties(${NACL_BOOTSTRAP_LIBRARY_NAME}
+    PROPERTIES INCLUDE_DIRECTORIES ${CMAKE_SOURCE_DIR}/Source/chrome_deps
+    COMPILE_FLAGS "-fno-builtin -fno-stack-protector -fno-pic -fno-PIC -fno-pie -fno-PIE"
+)
 
 add_executable(${NACL_BOOTSTRAP_MUNGE_PHDR_NAME} "nacl_bootstrap_munge_phdr.c")
 target_link_libraries(${NACL_BOOTSTRAP_MUNGE_PHDR_NAME} "-lelf") 
