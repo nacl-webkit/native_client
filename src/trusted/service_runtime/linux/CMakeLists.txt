@@ -20,8 +20,8 @@ else ()
   message(FATAL_ERROR "Unsupported arch $TARGET_ARCH}")
 endif ()
 
+include_directories("${CMAKE_SOURCE_DIR}/Source/chrome_deps")
 add_library(${NACL_BOOTSTRAP_LIBRARY_NAME} STATIC "nacl_bootstrap.c")
-set_target_properties(${NACL_BOOTSTRAP_LIBRARY_NAME} PROPERTIES INCLUDE_DIRECTORIES ${CMAKE_SOURCE_DIR}/Source/chrome_deps)
 set_target_properties(${NACL_BOOTSTRAP_LIBRARY_NAME} PROPERTIES COMPILE_FLAGS "-fno-builtin -fno-stack-protector -fno-pic -fno-PIC -fno-pie -fno-PIE")
 
 add_executable(${NACL_BOOTSTRAP_MUNGE_PHDR_NAME} "nacl_bootstrap_munge_phdr.c")
