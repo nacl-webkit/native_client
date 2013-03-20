@@ -68,13 +68,14 @@ elseif (${TARGET_ARCH} STREQUAL "i386")
         ${NATIVE_CLIENT_DIR}/src/trusted/service_runtime/arch/x86_32/nacl_switch_32
         ${NATIVE_CLIENT_DIR}/src/trusted/service_runtime/arch/x86_32/nacl_syscall_32
         ${NATIVE_CLIENT_DIR}/src/trusted/service_runtime/arch/x86_32/tramp_32
+        ${NATIVE_CLIENT_DIR}/src/trusted/service_runtime/arch/x86_32/springboard
     )
     list(APPEND NACL_SEL_LIBRARY_SOURCES
         ${NATIVE_CLIENT_DIR}/src/trusted/service_runtime/arch/x86/nacl_ldt_x86.c
         ${NATIVE_CLIENT_DIR}/src/trusted/service_runtime/arch/x86_32/nacl_app_32.c
         ${NATIVE_CLIENT_DIR}/src/trusted/service_runtime/arch/x86_32/nacl_switch_to_app_32.c
         ${NATIVE_CLIENT_DIR}/src/trusted/service_runtime/arch/x86_32/nacl_tls_32.c
-        ${NATIVE_CLIENT_DIR}/src/trusted/service_runtime/arch/x86_32/sel_addrspace_posix_x86_32.c
+        ${NATIVE_CLIENT_DIR}/src/trusted/service_runtime/arch/x86_32/sel_addrspace_x86_32.c
         ${NATIVE_CLIENT_DIR}/src/trusted/service_runtime/arch/x86_32/sel_ldr_x86_32.c
         ${NATIVE_CLIENT_DIR}/src/trusted/service_runtime/arch/x86_32/sel_rt_32.c
         ${NATIVE_CLIENT_DIR}/src/trusted/service_runtime/linux/nacl_signal_32.c

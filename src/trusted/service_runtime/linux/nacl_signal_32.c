@@ -4,6 +4,11 @@
  * be found in the LICENSE file.
  */
 
+/* FIXME:
+ * _GNU_SOURCE is defined in order to reach the definitions of REG_XXX
+ * in /usr/include/i386-linux-gnu/sys/ucontext.h
+ */
+#define _GNU_SOURCE
 #include <signal.h>
 #if !NACL_ANDROID
 #include <sys/ucontext.h>
