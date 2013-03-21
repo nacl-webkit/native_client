@@ -271,8 +271,7 @@ SET(NACL_WINDOWS 0)
 
 SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fno-strict-aliasing -Wno-missing-field-initializers -Wextra")
 #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ifany...")
-
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -idirafter ${CMAKE_SOURCE_DIR}/Source/native_client/src/trusted/service_runtime/include")
+SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -idirafter ${CMAKE_SOURCE_DIR}/Source/native_client/src/trusted/service_runtime/include")
 
 INCLUDE_DIRECTORIES(
     ${CMAKE_SOURCE_DIR}/Source
