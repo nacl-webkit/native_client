@@ -43,13 +43,6 @@ NaClSyncStatus NaClCondVarWait(struct NaClCondVar *cvp,
   return NACL_SYNC_OK;
 }
 
-//from sdk header
-struct timezone
-  {
-    int tz_minuteswest;		/* Minutes west of GMT.  */
-    int tz_dsttime;		/* Nonzero if DST is ever in effect.  */
-  };
-
 NaClSyncStatus NaClCondVarTimedWaitRelative(
     struct NaClCondVar             *cvp,
     struct NaClMutex               *mp,

@@ -7,6 +7,8 @@ SET(nacl_SRC_DIR "${CMAKE_SOURCE_DIR}/Source/native_client/src")
 SET(nacl_INCLUDE_DIRECTORIES "${nacl_SRC_DIR}/include/")
 SET(nacl_INCLUDE_DIRECTORIES ${nacl_INCLUDE_DIRECTORIES} PARENT_SCOPE)
 
+INCLUDE(${nacl_SRC_DIR}/../common.txt)
+
 SET(nacl_SOURCES
     ${nacl_SRC_DIR}/shared/gio/gio.h
     ${nacl_SRC_DIR}/shared/gio/gio.c
@@ -260,24 +262,19 @@ SET(nacl_SOURCES
     #${nacl_SRC_DIR}/untrusted/nacl/nameservice.c
 )
 
-ADD_DEFINITIONS(-DNACL_LINUX=1)
 SET(NACL_LINUX 1)
-ADD_DEFINITIONS(-DNACL_OSX=0)
 SET(NACL_OSX 0)
-ADD_DEFINITIONS(-DNACL_WINDOWS=0)
 SET(NACL_WINDOWS 0)
 
-ADD_DEFINITIONS(-DNACL_NACL_BUILD_ARCH=NACL_x86)
-ADD_DEFINITIONS(-DNACL_BUILD_SUBARCH=64)
 #ADD_DEFINITIONS(-D__native_client__)
 #ADD_DEFINITIONS(-D__LITTLE_ENDIAN__)
 
 SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fno-strict-aliasing -Wno-missing-field-initializers -Wextra")
 #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ifany...")
+SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -idirafter ${CMAKE_SOURCE_DIR}/Source/native_client/src/trusted/service_runtime/include")
 
 INCLUDE_DIRECTORIES(
-    "${CMAKE_SOURCE_DIR}/Source"
-    "${CMAKE_SOURCE_DIR}/Source/native_client/src/trusted/service_runtime/include/"
+    ${CMAKE_SOURCE_DIR}/Source
     ${nacl_INCLUDE_DIRECTORIES}
 )
 ADD_LIBRARY(${nacl_LIBRARY_NAME} SHARED ${nacl_SOURCES})
