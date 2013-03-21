@@ -67,8 +67,8 @@ elseif (${TARGET_ARCH} STREQUAL "i386")
     set(ASM_S_INPUT_FILES 
         ${NATIVE_CLIENT_DIR}/src/trusted/service_runtime/arch/x86_32/nacl_switch_32
         ${NATIVE_CLIENT_DIR}/src/trusted/service_runtime/arch/x86_32/nacl_syscall_32
-        ${NATIVE_CLIENT_DIR}/src/trusted/service_runtime/arch/x86_32/tramp_32
         ${NATIVE_CLIENT_DIR}/src/trusted/service_runtime/arch/x86_32/springboard
+        ${NATIVE_CLIENT_DIR}/src/trusted/service_runtime/arch/x86_32/tramp_32
     )
     list(APPEND NACL_SEL_LIBRARY_SOURCES
         ${NATIVE_CLIENT_DIR}/src/trusted/service_runtime/arch/x86/nacl_ldt_x86.c
