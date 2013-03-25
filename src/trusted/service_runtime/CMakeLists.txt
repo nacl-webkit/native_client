@@ -1,6 +1,18 @@
 set(NACLASM_LIBRARY_NAME naclasm)
 
 set(NACL_SEL_LIBRARY_SOURCES
+    ${NATIVE_CLIENT_DIR}/src/trusted/debug_stub/abi.cc
+    ${NATIVE_CLIENT_DIR}/src/trusted/debug_stub/debug_stub.cc
+    ${NATIVE_CLIENT_DIR}/src/trusted/debug_stub/nacl_debug.cc
+    ${NATIVE_CLIENT_DIR}/src/trusted/debug_stub/packet.cc
+    ${NATIVE_CLIENT_DIR}/src/trusted/debug_stub/posix/debug_stub_posix.cc
+    ${NATIVE_CLIENT_DIR}/src/trusted/debug_stub/posix/platform_impl.cc
+    ${NATIVE_CLIENT_DIR}/src/trusted/debug_stub/posix/thread_impl.cc
+    ${NATIVE_CLIENT_DIR}/src/trusted/debug_stub/session.cc
+    ${NATIVE_CLIENT_DIR}/src/trusted/debug_stub/target.cc
+    ${NATIVE_CLIENT_DIR}/src/trusted/debug_stub/thread_common.cc
+    ${NATIVE_CLIENT_DIR}/src/trusted/debug_stub/transport_common.cc
+    ${NATIVE_CLIENT_DIR}/src/trusted/debug_stub/util.cc
     ${NATIVE_CLIENT_DIR}/src/trusted/service_runtime/dyn_array.c
     ${NATIVE_CLIENT_DIR}/src/trusted/service_runtime/elf_util.c
     ${NATIVE_CLIENT_DIR}/src/trusted/service_runtime/nacl_all_modules.c
@@ -45,7 +57,6 @@ set(NACL_SEL_LIBRARY_SOURCES
 
 set(VALIDATOR_X86_SOURCES
     ${NATIVE_CLIENT_DIR}/src/trusted/cpu_features/arch/x86/cpu_x86.c
-    ${NATIVE_CLIENT_DIR}/src/trusted/validator/validator_init.c
     ${NATIVE_CLIENT_DIR}/src/trusted/validator/x86/64/ncvalidate.c
     ${NATIVE_CLIENT_DIR}/src/trusted/validator/x86/64/ncvalidate_verbose.c
     ${NATIVE_CLIENT_DIR}/src/trusted/validator/x86/error_reporter.c

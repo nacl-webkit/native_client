@@ -151,7 +151,7 @@ void NaClChromeMainStart(struct NaClChromeMainArgs *args) {
   /* to be passed to NaClMain, eventually... */
   av[0] = "NaClMain";
 
-  if (NACL_FI_ERROR_COND("AppCtor", !NaClAppCtor(&state))) {
+  if (!NaClAppCtor(&state)) {
     NaClLog(LOG_FATAL, "Error while constructing app state\n");
     goto done;
   }
