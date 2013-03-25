@@ -215,44 +215,8 @@ SET(nacl_SOURCES
     ${nacl_SRC_DIR}/trusted/simple_service/nacl_simple_service.c
     ${nacl_SRC_DIR}/trusted/threading/nacl_thread_interface.h
     ${nacl_SRC_DIR}/trusted/threading/nacl_thread_interface.c
-    ${nacl_SRC_DIR}/trusted/weak_ref/weak_ref.cc
-
-    ${nacl_SRC_DIR}/trusted/cpu_features/arch/x86/cpu_x86.c
     ${nacl_SRC_DIR}/trusted/validator/validator_init.c
-    ${nacl_SRC_DIR}/trusted/validator/x86/64/ncvalidate.c
-    ${nacl_SRC_DIR}/trusted/validator/x86/64/ncvalidate_verbose.c
-    ${nacl_SRC_DIR}/trusted/validator/x86/error_reporter.c
-    ${nacl_SRC_DIR}/trusted/validator/x86/error_reporter_verbose.c
-    ${nacl_SRC_DIR}/trusted/validator/x86/halt_trim.c
-    ${nacl_SRC_DIR}/trusted/validator/x86/ncinstbuffer.c
-    ${nacl_SRC_DIR}/trusted/validator/x86/ncinstbuffer_inl.c
-    ${nacl_SRC_DIR}/trusted/validator/x86/nc_segment.c
-    ${nacl_SRC_DIR}/trusted/validator/x86/decoder/ncdis_decode_tables.c
-    ${nacl_SRC_DIR}/trusted/validator/x86/decoder/nc_inst_iter.c
-    ${nacl_SRC_DIR}/trusted/validator/x86/decoder/nc_inst_state.c
-    ${nacl_SRC_DIR}/trusted/validator/x86/decoder/nc_inst_state_statics.c
-    ${nacl_SRC_DIR}/trusted/validator/x86/decoder/nc_inst_trans.c
-    ${nacl_SRC_DIR}/trusted/validator/x86/decoder/ncopcode_desc.c
-    ${nacl_SRC_DIR}/trusted/validator/x86/decoder/ncopcode_desc_verbose.c
-    ${nacl_SRC_DIR}/trusted/validator/x86/decoder/ncop_exps.c
-    ${nacl_SRC_DIR}/trusted/validator/x86/x86_insts.c
-    ${nacl_SRC_DIR}/trusted/validator/x86/x86_insts_inl.c
-    ${nacl_SRC_DIR}/trusted/validator/x86/x86_insts_verbose.c
-    ${nacl_SRC_DIR}/trusted/validator/x86/ncval_reg_sfi/address_sets.c
-    #${nacl_SRC_DIR}/trusted/validator/x86/ncval_reg_sfi/address_sets_inl.c
-    ${nacl_SRC_DIR}/trusted/validator/x86/ncval_reg_sfi/nc_cpu_checks.c
-    ${nacl_SRC_DIR}/trusted/validator/x86/ncval_reg_sfi/nc_illegal.c
-    ${nacl_SRC_DIR}/trusted/validator/x86/ncval_reg_sfi/nc_jumps.c
-    ${nacl_SRC_DIR}/trusted/validator/x86/ncval_reg_sfi/nc_jumps_detailed.c
-    ${nacl_SRC_DIR}/trusted/validator/x86/ncval_reg_sfi/nc_memory_protect.c
-    ${nacl_SRC_DIR}/trusted/validator/x86/ncval_reg_sfi/nc_opcode_histogram.c
-    ${nacl_SRC_DIR}/trusted/validator/x86/ncval_reg_sfi/nc_postconds.c
-    ${nacl_SRC_DIR}/trusted/validator/x86/ncval_reg_sfi/nc_protect_base.c
-    ${nacl_SRC_DIR}/trusted/validator/x86/ncval_reg_sfi/ncval_decode_tables.c
-    ${nacl_SRC_DIR}/trusted/validator/x86/ncval_reg_sfi/ncvalidate_iter.c
-    ${nacl_SRC_DIR}/trusted/validator/x86/ncval_reg_sfi/ncvalidate_iter_detailed.c
-    ${nacl_SRC_DIR}/trusted/validator/x86/ncval_reg_sfi/ncvalidate_iter_verbose.c
-    ${nacl_SRC_DIR}/trusted/validator/x86/ncval_reg_sfi/ncvalidate_utils.c
+    ${nacl_SRC_DIR}/trusted/weak_ref/weak_ref.cc
 
     #${nacl_SRC_DIR}/untrusted/nacl/clock.c
     #${nacl_SRC_DIR}/untrusted/nacl/clock_getres.c
@@ -302,10 +266,6 @@ SET(NACL_LINUX 1)
 SET(NACL_OSX 0)
 SET(NACL_WINDOWS 0)
 
-ADD_DEFINITIONS(-DNACL_NACL_BUILD_ARCH=NACL_x86)
-ADD_DEFINITIONS(-DNACL_BUILD_SUBARCH=64)
-ADD_DEFINITIONS(-DNACL_NACL_TARGET_ARCH=NACL_x86)
-ADD_DEFINITIONS(-DNACL_TARGET_SUBARCH=64)
 #ADD_DEFINITIONS(-D__native_client__)
 #ADD_DEFINITIONS(-D__LITTLE_ENDIAN__)
 

@@ -22,8 +22,6 @@
 #include "native_client/src/include/portability_io.h"
 #include "native_client/src/shared/platform/nacl_log.h"
 
-#include <assert.h>
-
 /*
  * TODO(bradchen): consolidate to use one debug print mechanism.
  */
@@ -422,17 +420,15 @@ static int CheckCPUFeature(NaClCPUData* data, NaClCPUFeatureX86ID fid) {
   }
 }
 
-//FIXME this defined in native_client/src/trusted/cpu_features/arch/x86/cpu_xgetbv.S
-//uint64_t NaClXGETBV(uint32_t);
+uint64_t NaClXGETBV(uint32_t);
 
 /* Cache XCR vector */
 static void CacheCPUXCRVector(NaClCPUData* data) {
   if (CheckCPUFeature(data, NaClCPUFeatureX86_OSXSAVE)) {
-    assert(0);
-//FIXME    int i;
-//FIXME    for (i = 0; i < kMaxCPUXCRReg; ++i) {
-//FIXME      data->_xcrv[i] = NaClXGETBV(i);
-//FIXME    }
+    int i;
+    for (i = 0; i < kMaxCPUXCRReg; ++i) {
+      data->_xcrv[i] = NaClXGETBV(i);
+    }
   } else {
     int i;
     for (i = 0; i < kMaxCPUXCRReg; ++i) {
