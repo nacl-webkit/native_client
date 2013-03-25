@@ -151,7 +151,8 @@ void NaClChromeMainStart(struct NaClChromeMainArgs *args) {
   /* to be passed to NaClMain, eventually... */
   av[0] = "NaClMain";
 
-  if (NACL_FI_ERROR_COND("AppCtor", !NaClAppCtor(&state))) {
+//  if (NACL_FI_ERROR_COND("AppCtor", !NaClAppCtor(&state))) { //FIXME NaClFaultInjectionFaultP not ready yet
+  if (!NaClAppCtor(&state)) {
     NaClLog(LOG_FATAL, "Error while constructing app state\n");
     goto done;
   }
@@ -315,12 +316,12 @@ void NaClChromeMainStart(struct NaClChromeMainArgs *args) {
   if (args->enable_debug_stub) {
 #if NACL_LINUX || NACL_OSX
     if (args->debug_stub_server_bound_socket_fd != NACL_INVALID_SOCKET) {
-      NaClDebugSetBoundSocket(args->debug_stub_server_bound_socket_fd);
+      //FIXME NaClDebugSetBoundSocket(args->debug_stub_server_bound_socket_fd);
     }
 #endif
-    if (!NaClDebugInit(nap)) {
-      goto done;
-    }
+    //FIXME if (!NaClDebugInit(nap)) {
+    //FIXME   goto done;
+    //FIXME }
   }
 
   free(args);

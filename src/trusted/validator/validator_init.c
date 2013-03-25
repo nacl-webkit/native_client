@@ -17,8 +17,6 @@ void EmitExperimentalValidatorWarning(void) {
 }
 
 const struct NaClValidatorInterface *NaClCreateValidator(void) {
-  assert(0);
-  return NaClValidatorInterface();
 //FIXME #if NACL_ARCH(NACL_BUILD_ARCH) == NACL_arm
 //FIXME   return NaClValidatorCreateArm();
 //FIXME #elif NACL_ARCH(NACL_BUILD_ARCH) == NACL_mips
@@ -29,7 +27,7 @@ const struct NaClValidatorInterface *NaClCreateValidator(void) {
 //FIXME   EmitExperimentalValidatorWarning();
 //FIXME   return NaClDfaValidatorCreate_x86_64();
 //FIXME #  else
-//FIXME   return NaClValidatorCreate_x86_64();
+  return NaClValidatorCreate_x86_64();
 //FIXME #  endif  /* defined(NACL_VALIDATOR_RAGEL) */
 //FIXME # elif NACL_TARGET_SUBARCH == 32
 //FIXME #  if defined(NACL_VALIDATOR_RAGEL)
