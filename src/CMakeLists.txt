@@ -79,6 +79,19 @@ SET(nacl_SOURCES
     ${nacl_SRC_DIR}/shared/srpc/rpc_service.c
     ${nacl_SRC_DIR}/shared/srpc/rpc_server_loop.c
 
+    ${nacl_SRC_DIR}/trusted/debug_stub/abi.cc
+    ${nacl_SRC_DIR}/trusted/debug_stub/debug_stub.cc
+    ${nacl_SRC_DIR}/trusted/debug_stub/nacl_debug.cc
+    ${nacl_SRC_DIR}/trusted/debug_stub/packet.cc
+    ${nacl_SRC_DIR}/trusted/debug_stub/posix/debug_stub_posix.cc
+    ${nacl_SRC_DIR}/trusted/debug_stub/posix/platform_impl.cc
+    ${nacl_SRC_DIR}/trusted/debug_stub/posix/thread_impl.cc
+    ${nacl_SRC_DIR}/trusted/debug_stub/session.cc
+    ${nacl_SRC_DIR}/trusted/debug_stub/target.cc
+    ${nacl_SRC_DIR}/trusted/debug_stub/thread_common.cc
+    ${nacl_SRC_DIR}/trusted/debug_stub/transport_common.cc
+    ${nacl_SRC_DIR}/trusted/debug_stub/util.cc
+
     ${nacl_SRC_DIR}/trusted/desc/nacl_desc_base.c
     ${nacl_SRC_DIR}/trusted/desc/nacl_desc_base.h
     ${nacl_SRC_DIR}/trusted/desc/nacl_desc_cond.c
