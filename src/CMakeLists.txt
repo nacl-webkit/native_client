@@ -1,6 +1,7 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 
 SET(nacl_LIBRARY_NAME "nacl")
+set(NACLASM_CPU_LIBRARY_NAME naclasm_cpu)
 SET(nacl_LIBRARY_NAME ${nacl_LIBRARY_NAME} PARENT_SCOPE)
 SET(nacl_SRC_DIR "${CMAKE_SOURCE_DIR}/Source/native_client/src")
 
@@ -275,6 +276,77 @@ SET(nacl_SOURCES
     #${nacl_SRC_DIR}/untrusted/nacl/nameservice.c
 )
 
+set(VALIDATOR_X86_SOURCES
+    ${nacl_SRC_DIR}/trusted/cpu_features/arch/x86/cpu_x86.c
+    ${nacl_SRC_DIR}/trusted/validator/x86/64/ncvalidate.c
+    ${nacl_SRC_DIR}/trusted/validator/x86/64/ncvalidate_verbose.c
+    ${nacl_SRC_DIR}/trusted/validator/x86/error_reporter.c
+    ${nacl_SRC_DIR}/trusted/validator/x86/error_reporter_verbose.c
+    ${nacl_SRC_DIR}/trusted/validator/x86/halt_trim.c
+    ${nacl_SRC_DIR}/trusted/validator/x86/ncinstbuffer.c
+    ${nacl_SRC_DIR}/trusted/validator/x86/ncinstbuffer_inl.c
+    ${nacl_SRC_DIR}/trusted/validator/x86/nc_segment.c
+    ${nacl_SRC_DIR}/trusted/validator/x86/decoder/ncdis_decode_tables.c
+    ${nacl_SRC_DIR}/trusted/validator/x86/decoder/nc_inst_iter.c
+    ${nacl_SRC_DIR}/trusted/validator/x86/decoder/nc_inst_state.c
+    ${nacl_SRC_DIR}/trusted/validator/x86/decoder/nc_inst_state_statics.c
+    ${nacl_SRC_DIR}/trusted/validator/x86/decoder/nc_inst_trans.c
+    ${nacl_SRC_DIR}/trusted/validator/x86/decoder/ncopcode_desc.c
+    ${nacl_SRC_DIR}/trusted/validator/x86/decoder/ncopcode_desc_verbose.c
+    ${nacl_SRC_DIR}/trusted/validator/x86/decoder/ncop_exps.c
+    ${nacl_SRC_DIR}/trusted/validator/x86/x86_insts.c
+    ${nacl_SRC_DIR}/trusted/validator/x86/x86_insts_inl.c
+    ${nacl_SRC_DIR}/trusted/validator/x86/x86_insts_verbose.c
+    ${nacl_SRC_DIR}/trusted/validator/x86/ncval_reg_sfi/address_sets.c
+    #${nacl_SRC_DIR}/trusted/validator/x86/ncval_reg_sfi/address_sets_inl.c
+    ${nacl_SRC_DIR}/trusted/validator/x86/ncval_reg_sfi/nc_cpu_checks.c
+    ${nacl_SRC_DIR}/trusted/validator/x86/ncval_reg_sfi/nc_illegal.c
+    ${nacl_SRC_DIR}/trusted/validator/x86/ncval_reg_sfi/nc_jumps.c
+    ${nacl_SRC_DIR}/trusted/validator/x86/ncval_reg_sfi/nc_jumps_detailed.c
+    ${nacl_SRC_DIR}/trusted/validator/x86/ncval_reg_sfi/nc_memory_protect.c
+    ${nacl_SRC_DIR}/trusted/validator/x86/ncval_reg_sfi/nc_opcode_histogram.c
+    ${nacl_SRC_DIR}/trusted/validator/x86/ncval_reg_sfi/nc_postconds.c
+    ${nacl_SRC_DIR}/trusted/validator/x86/ncval_reg_sfi/nc_protect_base.c
+    ${nacl_SRC_DIR}/trusted/validator/x86/ncval_reg_sfi/ncval_decode_tables.c
+    ${nacl_SRC_DIR}/trusted/validator/x86/ncval_reg_sfi/ncvalidate_iter.c
+    ${nacl_SRC_DIR}/trusted/validator/x86/ncval_reg_sfi/ncvalidate_iter_detailed.c
+    ${nacl_SRC_DIR}/trusted/validator/x86/ncval_reg_sfi/ncvalidate_iter_verbose.c
+    ${nacl_SRC_DIR}/trusted/validator/x86/ncval_reg_sfi/ncvalidate_utils.c
+)
+
+if (${TARGET_ARCH} STREQUAL "x86_64")
+    set(ASM_S_INPUT_FILES 
+        ${NATIVE_CLIENT_DIR}/src/trusted/cpu_features/arch/x86/cpu_xgetbv
+    )
+    list(APPEND nacl_SOURCES
+        ${VALIDATOR_X86_SOURCES}
+        ${nacl_SRC_DIR}/trusted/validator/x86/64/ncvalidate.c
+        ${nacl_SRC_DIR}/trusted/validator/x86/64/ncvalidate_verbose.c
+    )
+elseif (${TARGET_ARCH} STREQUAL "i386")
+    set(ASM_S_INPUT_FILES 
+        ${NATIVE_CLIENT_DIR}/src/trusted/cpu_features/arch/x86/cpu_xgetbv
+    )
+    list(APPEND nacl_SOURCES
+        ${VALIDATOR_X86_SOURCES}
+        ${nacl_SRC_DIR}/trusted/validator/x86/32/ncvalidate.c
+        ${nacl_SRC_DIR}/trusted/validator/x86/32/ncvalidate_verbose.c
+    )
+elseif (${TARGET_ARCH} MATCHES "^arm*")
+    list(APPEND nacl_SOURCES
+        ${nacl_SRC_DIR}/trusted/validator_arm/address_set.cc
+        ${nacl_SRC_DIR}/trusted/validator_arm/actual_classes.cc
+        ${nacl_SRC_DIR}/trusted/validator_arm/baseline_classes.cc
+        ${nacl_SRC_DIR}/trusted/validator_arm/inst_classes.cc
+        ${nacl_SRC_DIR}/trusted/validator_arm/model.cc
+        ${nacl_SRC_DIR}/trusted/validator_arm/validator.cc
+        ${nacl_SRC_DIR}/trusted/validator_arm/gen/arm32_decode.cc
+        ${nacl_SRC_DIR}/trusted/validator_arm/gen/arm32_decode_actuals_1.cc
+        ${nacl_SRC_DIR}/trusted/validator_arm/gen/arm32_decode_actuals_2.cc
+        ${nacl_SRC_DIR}/trusted/validator_arm/ncvalidate.cc
+    )
+endif ()
+
 SET(NACL_LINUX 1)
 SET(NACL_OSX 0)
 SET(NACL_WINDOWS 0)
@@ -286,12 +358,28 @@ SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fno-strict-aliasing -Wno-missing-field-init
 #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ifany...")
 SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -idirafter ${CMAKE_SOURCE_DIR}/Source/native_client/src/trusted/service_runtime/include")
 
+add_custom_target(asm_cpu_precompile)
+foreach (ASM_S ${ASM_S_INPUT_FILES})
+    add_custom_command(
+        OUTPUT ${ASM_S}.s
+        COMMAND cpp
+        ARGS -I${NATIVE_CLIENT_DIR}/.. ${CPP_PRECOMPILE_FLAGS} ${ASM_S}.S ${ASM_S}.s
+        DEPENDS ${ASM_S}.S
+    )
+    list(APPEND ASM_s_SOURCES ${ASM_S}.s)
+    add_dependencies(asm_cpu_precompile ${ASM_S}.s)
+endforeach ()
+
+enable_language(ASM-ATT)
+add_library(${NACLASM_CPU_LIBRARY_NAME} STATIC ${ASM_s_SOURCES})
+add_dependencies(${NACLASM_CPU_LIBRARY_NAME} asm_cpu_precompile)
+
 INCLUDE_DIRECTORIES(
     ${CMAKE_SOURCE_DIR}/Source
     ${nacl_INCLUDE_DIRECTORIES}
 )
 ADD_LIBRARY(${nacl_LIBRARY_NAME} SHARED ${nacl_SOURCES})
-
 SET_TARGET_PROPERTIES(${nacl_LIBRARY_NAME} PROPERTIES VERSION ${PROJECT_VERSION} SOVERSION ${PROJECT_VERSION_MAJOR})
+target_link_libraries(${nacl_LIBRARY_NAME} ${NACLASM_CPU_LIBRARY_NAME})
 
 INSTALL(TARGETS ${nacl_LIBRARY_NAME} DESTINATION "${LIB_INSTALL_DIR}")
