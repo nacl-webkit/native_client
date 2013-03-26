@@ -102,11 +102,6 @@ set(NACL_SEL_INCLUDE_DIRECTORIES
     ${NATIVE_CLIENT_DIR}/src/third_party
 )
 
-set(NACL_SEL_LIBRARY_LIBRARIES
-    ${nacl_LIBRARY_NAME}
-    ${NACLASM_SERVICE_RUNTIME_LIBRARY_NAME}
-)
-
 add_custom_target(asm_service_runtime_precompile)
 foreach (ASM_S ${ASM_S_INPUT_FILES})
     add_custom_command(
@@ -126,4 +121,4 @@ add_dependencies(${NACLASM_SERVICE_RUNTIME_LIBRARY_NAME} asm_service_runtime_pre
 include_directories(${NACL_SEL_INCLUDE_DIRECTORIES})
 add_library(${NACL_SEL_LIBRARY_NAME} STATIC ${NACL_SEL_LIBRARY_SOURCES})
 set_target_properties(${NACL_SEL_LIBRARY_NAME} PROPERTIES COMPILE_FLAGS "-fPIC")
-target_link_libraries(${NACL_SEL_LIBRARY_NAME} ${NACL_SEL_LIBRARY_LIBRARIES})
+target_link_libraries(${NACL_SEL_LIBRARY_NAME} ${NACLASM_SERVICE_RUNTIME_LIBRARY_NAME})
