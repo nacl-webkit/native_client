@@ -94,9 +94,9 @@ int32_t NaClAbiStatHostDescStatXlateCtor(struct nacl_abi_stat    *dst,
   dst->nacl_abi_st_size = (nacl_abi_off_t) src->st_size;
   dst->nacl_abi_st_blksize = 0;
   dst->nacl_abi_st_blocks = 0;
-  //FIXME: dst->nacl_abi_st_atime = src->st_atime;
-  //FIXME: dst->nacl_abi_st_mtime = src->st_mtime;
-  //FIXME: dst->nacl_abi_st_ctime = src->st_ctime;
+  dst->nacl_abi_st_atime = src->st_atime;
+  dst->nacl_abi_st_mtime = src->st_mtime;
+  dst->nacl_abi_st_ctime = src->st_ctime;
 
   /*
    * For now, zero these fields.  We may want to expose the
