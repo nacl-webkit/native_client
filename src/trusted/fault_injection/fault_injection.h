@@ -185,9 +185,10 @@ EXTERN_C_BEGIN
  */
 
 #define NACL_FI_VAL(site_name, type, funcall) \
-  (NaClFaultInjectionFaultP(site_name)        \
-   ? (type) NaClFaultInjectionValue()         \
-   : (funcall))
+    (funcall)
+//FIXME  (NaClFaultInjectionFaultP(site_name)        \
+//FIXME   ? (type) NaClFaultInjectionValue()         \
+//FIXME   : (funcall))
 
 /*
  * int syscall_ret = NACL_FI_SYSCALL("PlatformLinuxRead3",
@@ -200,9 +201,10 @@ EXTERN_C_BEGIN
  * This case causes the call to return -1 and sets errno to 9.
  */
 #define NACL_FI_SYSCALL(site_name, funcall)          \
-  (NaClFaultInjectionFaultP(site_name)               \
-   ? ((errno = (int) NaClFaultInjectionValue()), -1) \
-   : (funcall))
+    (funcall)
+//FIXME  (NaClFaultInjectionFaultP(site_name)               \
+//FIXME   ? ((errno = (int) NaClFaultInjectionValue()), -1) \
+//FIXME   : (funcall))
 
 /*
  * int syscall_ret = NACL_FI_TYPED_SYSCALL("PlatformLinuxMmap5",
@@ -215,9 +217,10 @@ EXTERN_C_BEGIN
  * This case causes the call to return -1 and sets errno to 9.
  */
 #define NACL_FI_TYPED_SYSCALL(site_name, type, funcall)     \
-  (NaClFaultInjectionFaultP(site_name)                      \
-   ? ((errno = (int) NaClFaultInjectionValue()), (type) -1) \
-   : (funcall))
+    (funcall)
+//FIXME  (NaClFaultInjectionFaultP(site_name)                      \
+//FIXME   ? ((errno = (int) NaClFaultInjectionValue()), (type) -1) \
+//FIXME   : (funcall))
 
 EXTERN_C_END
 

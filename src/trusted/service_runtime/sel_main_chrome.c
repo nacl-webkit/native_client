@@ -195,7 +195,8 @@ void NaClChromeMainStart(struct NaClChromeMainArgs *args) {
   /*
    * Ensure this operating system platform is supported.
    */
-  skip_qualification = getenv("NACL_DANGEROUS_SKIP_QUALIFICATION_TEST") != NULL;
+  //FIXME To reenable it when NaClRunSelQualificationTests() is ready
+  skip_qualification = 1; //FIXME getenv("NACL_DANGEROUS_SKIP_QUALIFICATION_TEST") != NULL;
   if (skip_qualification) {
     fprintf(stderr, "PLATFORM QUALIFICATION DISABLED - "
         "Native Client's sandbox will be unreliable!\n");
