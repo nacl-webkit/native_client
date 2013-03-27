@@ -139,6 +139,8 @@ set(nacl_SOURCES
     ${nacl_SRC_DIR}/trusted/desc/posix/nacl_desc_imc_bound_desc.c
     ${nacl_SRC_DIR}/trusted/desc/posix/nacl_makeboundsock.c
 
+    ${nacl_SRC_DIR}/trusted/fault_injection/fault_injection.c
+
     ${nacl_SRC_DIR}/trusted/interval_multiset/nacl_interval_range_tree.c
     ${nacl_SRC_DIR}/trusted/interval_multiset/nacl_interval_multiset_delete.c
     ${nacl_SRC_DIR}/trusted/interval_multiset/nacl_interval_list.c

@@ -87,16 +87,14 @@ EXTERN_C_BEGIN
  * Must be called before going multithreaded.  Idempotent: repeated
  * calls ignored.
  */
-//FIXME void NaClFaultInjectionModuleInit(void);
+void NaClFaultInjectionModuleInit(void);
 
 /*
  * Private functions, to be used only by the macros below.  Not stable
  * ABI; may change.
  */
-//FIXME int NaClFaultInjectionFaultP(char const *site_name);
-//FIXME uintptr_t NaClFaultInjectionValue(void);
-#define NaClFaultInjectionFaultP(a) (void*)(a)
-#define NaClFaultInjectionValue() 0
+int NaClFaultInjectionFaultP(char const *site_name);
+uintptr_t NaClFaultInjectionValue(void);
 
 /*
  * Function to free per-thread counters.
@@ -106,13 +104,13 @@ EXTERN_C_BEGIN
  * function, so sans deeper integration with threading libraries
  * (e.g. platform), we cannot do the cleanup automatically.
  */
-//FIXME void NaClFaultInjectionPreThreadExitCleanup(void);
+void NaClFaultInjectionPreThreadExitCleanup(void);
 
 /*
  * Private test functions.
  */
-//FIXME void NaClFaultInjectionModuleInternalInit(void);
-//FIXME void NaClFaultInjectionModuleInternalFini(void);
+void NaClFaultInjectionModuleInternalInit(void);
+void NaClFaultInjectionModuleInternalFini(void);
 
 
 /*
@@ -156,16 +154,14 @@ EXTERN_C_BEGIN
  * triggers.
  */
 #define NACL_FI_ERROR_COND(site_name, expr)     \
-    (expr)
-//FIXME  (NACL_FI(site_name, expr, 1))
+  (NACL_FI(site_name, expr, 1))
 
 #define NACL_FI_FATAL(site_name)                                      \
   do {                                                                \
     if (NACL_FI(site_name, 0, 1)) {                                   \
-      NaClLog(LOG_INFO, "NaCl Fault Injection: at %s\n", site_name); \
+      NaClLog(LOG_FATAL, "NaCl Fault Injection: at %s\n", site_name); \
     }                                                                 \
   } while (0)
-//FIXME      NaClLog(LOG_FATAL, "NaCl Fault Injection: at %s\n", site_name); \
 
 /*
  * NaClErrorCode = NACL_FI_VAL("load_module", NaClErrorCode,
@@ -185,10 +181,9 @@ EXTERN_C_BEGIN
  */
 
 #define NACL_FI_VAL(site_name, type, funcall) \
-    (funcall)
-//FIXME  (NaClFaultInjectionFaultP(site_name)        \
-//FIXME   ? (type) NaClFaultInjectionValue()         \
-//FIXME   : (funcall))
+  (NaClFaultInjectionFaultP(site_name)        \
+   ? (type) NaClFaultInjectionValue()         \
+   : (funcall))
 
 /*
  * int syscall_ret = NACL_FI_SYSCALL("PlatformLinuxRead3",
@@ -201,10 +196,9 @@ EXTERN_C_BEGIN
  * This case causes the call to return -1 and sets errno to 9.
  */
 #define NACL_FI_SYSCALL(site_name, funcall)          \
-    (funcall)
-//FIXME  (NaClFaultInjectionFaultP(site_name)               \
-//FIXME   ? ((errno = (int) NaClFaultInjectionValue()), -1) \
-//FIXME   : (funcall))
+  (NaClFaultInjectionFaultP(site_name)               \
+   ? ((errno = (int) NaClFaultInjectionValue()), -1) \
+   : (funcall))
 
 /*
  * int syscall_ret = NACL_FI_TYPED_SYSCALL("PlatformLinuxMmap5",
@@ -217,10 +211,9 @@ EXTERN_C_BEGIN
  * This case causes the call to return -1 and sets errno to 9.
  */
 #define NACL_FI_TYPED_SYSCALL(site_name, type, funcall)     \
-    (funcall)
-//FIXME  (NaClFaultInjectionFaultP(site_name)                      \
-//FIXME   ? ((errno = (int) NaClFaultInjectionValue()), (type) -1) \
-//FIXME   : (funcall))
+  (NaClFaultInjectionFaultP(site_name)                      \
+   ? ((errno = (int) NaClFaultInjectionValue()), (type) -1) \
+   : (funcall))
 
 EXTERN_C_END
 
