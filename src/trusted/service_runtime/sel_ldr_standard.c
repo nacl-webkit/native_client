@@ -13,7 +13,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <assert.h>
 
 #include "native_client/src/include/elf_constants.h"
 #include "native_client/src/include/elf.h"
@@ -107,9 +106,8 @@ void NaClFillEndOfTextRegion(struct NaClApp *nap) {
           nap->mem_start + nap->static_text_end,
           page_pad);
 
-  assert(0);
-//  NaClFillMemoryRegionWithHalt((void *)(nap->mem_start + nap->static_text_end),
-//                               page_pad);
+  NaClFillMemoryRegionWithHalt((void *)(nap->mem_start + nap->static_text_end),
+                               page_pad);
 
   nap->static_text_end += page_pad;
 }
@@ -380,13 +378,13 @@ NaClErrorCode NaClAppLoadFileAslr(struct Gio        *gp,
   }
 
   NaClLog(2, "Initializing arch switcher\n");
-  //NaClInitSwitchToApp(nap);
+  NaClInitSwitchToApp(nap);
 
   NaClLog(2, "Installing trampoline\n");
   NaClLoadTrampoline(nap);
 
   NaClLog(2, "Installing springboard\n");
-  //NaClLoadSpringboard(nap);
+  NaClLoadSpringboard(nap);
 
   /*
    * NaClMemoryProtect also initializes the mem_map w/ information
@@ -567,18 +565,17 @@ int NaClAppLaunchServiceThreads(struct NaClApp *nap) {
     NaClDescUnref(kernel_service->base.bound_and_cap[1]);
     goto done;
   }
-  assert(0);
-  //FIXME if (!NaClManifestProxyCtor(manifest_proxy,
-  //FIXME                            NaClAddrSpSquattingThreadIfFactoryFunction,
-  //FIXME                            (void *) nap,
-  //FIXME                            nap)) {
-  //FIXME   NaClLog(LOG_ERROR, "ManifestProxyCtor failed\n");
-  //FIXME   /* do not leave a non-NULL pointer to a not-fully constructed object */
-  //FIXME   free(manifest_proxy);
-  //FIXME   manifest_proxy = NULL;
-  //FIXME   NaClDescUnref(kernel_service->base.bound_and_cap[1]);
-  //FIXME   goto done;
-  //FIXME }
+  if (!NaClManifestProxyCtor(manifest_proxy,
+                             NaClAddrSpSquattingThreadIfFactoryFunction,
+                             (void *) nap,
+                             nap)) {
+    NaClLog(LOG_ERROR, "ManifestProxyCtor failed\n");
+    /* do not leave a non-NULL pointer to a not-fully constructed object */
+    free(manifest_proxy);
+    manifest_proxy = NULL;
+    NaClDescUnref(kernel_service->base.bound_and_cap[1]);
+    goto done;
+  }
 
   /*
    * NaClSimpleServiceStartServiceThread requires the nap->mu lock.
@@ -883,12 +880,11 @@ int NaClCreateMainThread(struct NaClApp     *nap,
           NaClSysToUserStackAddr(nap, stack_ptr));
 
   /* e_entry is user addr */
-  assert(0);
-  //retval = NaClAppThreadSpawn(nap,
-  //                            nap->initial_entry_pt,
-  //                            NaClSysToUserStackAddr(nap, stack_ptr),
-  //                            /* user_tls1= */ (uint32_t) nap->break_addr,
-  //                            /* user_tls2= */ 0);
+  retval = NaClAppThreadSpawn(nap,
+                              nap->initial_entry_pt,
+                              NaClSysToUserStackAddr(nap, stack_ptr),
+                              /* user_tls1= */ (uint32_t) nap->break_addr,
+                              /* user_tls2= */ 0);
 
 cleanup:
   free(argv_len);
@@ -926,15 +922,14 @@ int32_t NaClCreateAdditionalThread(struct NaClApp *nap,
                                    uintptr_t      sys_stack_ptr,
                                    uint32_t       user_tls1,
                                    uint32_t       user_tls2) {
-  //if (!NaClAppThreadSpawn(nap,
-  //                        prog_ctr,
-  //                        NaClSysToUserStackAddr(nap, sys_stack_ptr),
-  //                        user_tls1,
-  //                        user_tls2)) {
-  //  NaClLog(LOG_WARNING,
-  //          ("NaClCreateAdditionalThread: could not allocate thread."
-  //           "  Returning EAGAIN per POSIX specs.\n"));
-  //  return -NACL_ABI_EAGAIN;
-  //}
-  return 0;
+  if (!NaClAppThreadSpawn(nap,
+                          prog_ctr,
+                          NaClSysToUserStackAddr(nap, sys_stack_ptr),
+                          user_tls1,
+                          user_tls2)) {
+    NaClLog(LOG_WARNING,
+            ("NaClCreateAdditionalThread: could not allocate thread."
+             "  Returning EAGAIN per POSIX specs.\n"));
+    return -NACL_ABI_EAGAIN;
+  }
 }

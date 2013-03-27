@@ -102,6 +102,7 @@ set(NACL_SEL_INCLUDE_DIRECTORIES
     ${NATIVE_CLIENT_DIR}/src/third_party
 )
 
+# Add asm sources
 add_custom_target(asm_service_runtime_precompile)
 foreach (ASM_S ${ASM_S_INPUT_FILES})
     add_custom_command(
@@ -118,7 +119,23 @@ enable_language(ASM-ATT)
 add_library(${NACLASM_SERVICE_RUNTIME_LIBRARY_NAME} STATIC ${ASM_s_SOURCES})
 add_dependencies(${NACLASM_SERVICE_RUNTIME_LIBRARY_NAME} asm_service_runtime_precompile)
 
+# Generate syscall handler code
+set(syscall_handlers_output ${CMAKE_CURRENT_SOURCE_DIR}/posix/nacl_syscall_handlers.c)
+add_custom_target(gen_nacl_syscall_handler)
+add_custom_command(
+    OUTPUT ${syscall_handlers_output}
+    COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/nacl_syscall_handlers_gen.py
+    ARGS -i ${CMAKE_CURRENT_SOURCE_DIR}/posix/nacl_syscall_impl.c -o ${syscall_handlers_output}
+    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/posix/nacl_syscall_impl.c
+)
+add_dependencies(gen_nacl_syscall_handler ${syscall_handlers_output})
+
+add_library(gennacl_syscall_handler STATIC ${syscall_handlers_output})
+set_target_properties(gennacl_syscall_handler PROPERTIES COMPILE_FLAGS "-fPIC")
+add_dependencies(gennacl_syscall_handler gen_nacl_syscall_handler)
+
+
 include_directories(${NACL_SEL_INCLUDE_DIRECTORIES})
 add_library(${NACL_SEL_LIBRARY_NAME} STATIC ${NACL_SEL_LIBRARY_SOURCES})
 set_target_properties(${NACL_SEL_LIBRARY_NAME} PROPERTIES COMPILE_FLAGS "-fPIC")
-target_link_libraries(${NACL_SEL_LIBRARY_NAME} ${NACLASM_SERVICE_RUNTIME_LIBRARY_NAME})
+target_link_libraries(${NACL_SEL_LIBRARY_NAME} ${NACLASM_SERVICE_RUNTIME_LIBRARY_NAME} gennacl_syscall_handler)

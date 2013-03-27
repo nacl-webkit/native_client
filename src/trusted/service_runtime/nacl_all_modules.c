@@ -23,14 +23,14 @@ void  NaClAllModulesInit(void) {
   NaClGlobalModuleInit();  /* various global variables */
   NaClStackSafetyInit();
   NaClSrpcModuleInit();
-  //NaClTlsInit();
-  //NaClSyscallTableInit();
+  NaClTlsInit();
+  NaClSyscallTableInit();
   NaClThreadNiceInit();
 }
 
 
 void NaClAllModulesFini(void) {
-  //NaClTlsFini();
+  NaClTlsFini();
   NaClSrpcModuleFini();
   NaClStackSafetyFini();
   NaClGlobalModuleFini();

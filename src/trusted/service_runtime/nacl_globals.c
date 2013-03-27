@@ -31,7 +31,7 @@ uint32_t                    nacl_thread_ids[NACL_THREAD_MAX] = {0};
 uintptr_t                   nacl_global_xlate_base;
 
 void NaClGlobalModuleInit(void) {
-  //NaClInitGlobals();
+  NaClInitGlobals();
 }
 
 

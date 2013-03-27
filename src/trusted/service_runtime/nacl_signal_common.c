@@ -7,7 +7,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <assert.h>
 
 #include "native_client/src/include/nacl_base.h"
 #include "native_client/src/include/portability_io.h"
@@ -90,8 +89,7 @@ void NaClSignalContextGetCurrentThread(const struct NaClSignalContext *sig_ctx,
 #elif (NACL_ARCH(NACL_BUILD_ARCH) == NACL_x86 && NACL_BUILD_SUBARCH == 64) || \
       NACL_ARCH(NACL_BUILD_ARCH) == NACL_arm || \
       NACL_ARCH(NACL_BUILD_ARCH) == NACL_mips
-  assert(0);
-  uint32_t current_thread_index = 0; //FIXME: NaClTlsGetIdx();
+  uint32_t current_thread_index = NaClTlsGetIdx();
   if (NACL_TLS_INDEX_INVALID == current_thread_index) {
     *is_untrusted = 0;
     *result_thread = NULL;
@@ -186,30 +184,28 @@ enum NaClSignalResult NaClSignalHandleNone(int signal, void *ctx) {
 }
 
 enum NaClSignalResult NaClSignalHandleUntrusted(int signal, void *ctx) {
-  assert(0);
-  (void)signal; (void*)ctx;
-//  struct NaClSignalContext sig_ctx;
-//  char tmp[128];
-//  /*
-//   * Return an 8 bit error code which is -signal to
-//   * simulate normal OS behavior
-//   */
-//  NaClSignalContextFromHandler(&sig_ctx, ctx); //FIXME: this func has platform dependency
-//  if (NaClSignalContextIsUntrustedForCurrentThread(&sig_ctx)) {
-//    SNPRINTF(tmp, sizeof(tmp), "\n** Signal %d from untrusted code: "
-//             "pc=%" NACL_PRIxNACL_REG "\n", signal, sig_ctx.prog_ctr);
-//    NaClSignalErrorMessage(tmp);
-//    NaClExit((-signal) & 0xFF);
-//  }
-//  else {
-//    SNPRINTF(tmp, sizeof(tmp), "\n** Signal %d from trusted code: "
-//             "pc=%" NACL_PRIxNACL_REG "\n", signal, sig_ctx.prog_ctr);
-//    NaClSignalErrorMessage(tmp);
-//    /*
-//     * Continue the search for another handler so that trusted crashes
-//     * can be handled by the Breakpad crash reporter.
-//     */
-//  }
+  struct NaClSignalContext sig_ctx;
+  char tmp[128];
+  /*
+   * Return an 8 bit error code which is -signal to
+   * simulate normal OS behavior
+   */
+  NaClSignalContextFromHandler(&sig_ctx, ctx);
+  if (NaClSignalContextIsUntrustedForCurrentThread(&sig_ctx)) {
+    SNPRINTF(tmp, sizeof(tmp), "\n** Signal %d from untrusted code: "
+             "pc=%" NACL_PRIxNACL_REG "\n", signal, sig_ctx.prog_ctr);
+    NaClSignalErrorMessage(tmp);
+    NaClExit((-signal) & 0xFF);
+  }
+  else {
+    SNPRINTF(tmp, sizeof(tmp), "\n** Signal %d from trusted code: "
+             "pc=%" NACL_PRIxNACL_REG "\n", signal, sig_ctx.prog_ctr);
+    NaClSignalErrorMessage(tmp);
+    /*
+     * Continue the search for another handler so that trusted crashes
+     * can be handled by the Breakpad crash reporter.
+     */
+  }
   return NACL_SIGNAL_SEARCH;
 }
 

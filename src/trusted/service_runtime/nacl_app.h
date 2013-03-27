@@ -17,7 +17,7 @@ EXTERN_C_BEGIN
 
 struct NaClApp;
 
-//NaClErrorCode NaClAppPrepareToLaunch(struct NaClApp     *nap) NACL_WUR;
+NaClErrorCode NaClAppPrepareToLaunch(struct NaClApp     *nap) NACL_WUR;
 
 EXTERN_C_END
 

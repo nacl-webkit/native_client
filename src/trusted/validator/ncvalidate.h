@@ -146,7 +146,7 @@ struct NaClValidatorInterface {
 const struct NaClValidatorInterface *NaClCreateValidator(void);
 
 /* Known Validator API initializers. Private. Do not use outside validator. */
-//const struct NaClValidatorInterface *NaClValidatorCreate_x86_64(void);
+const struct NaClValidatorInterface *NaClValidatorCreate_x86_64(void);
 const struct NaClValidatorInterface *NaClValidatorCreate_x86_32(void);
 const struct NaClValidatorInterface *NaClDfaValidatorCreate_x86_32(void);
 const struct NaClValidatorInterface *NaClDfaValidatorCreate_x86_64(void);

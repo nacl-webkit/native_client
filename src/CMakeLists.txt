@@ -1,16 +1,16 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 
-SET(nacl_LIBRARY_NAME "nacl")
-set(NACLASM_CPU_LIBRARY_NAME naclasm_cpu)
-SET(nacl_LIBRARY_NAME ${nacl_LIBRARY_NAME} PARENT_SCOPE)
-SET(nacl_SRC_DIR "${CMAKE_SOURCE_DIR}/Source/native_client/src")
+set(nacl_LIBRARY_NAME "nacl")
+set(NACLASM_LIBRARY_NAME naclasm)
+set(nacl_LIBRARY_NAME ${nacl_LIBRARY_NAME} PARENT_SCOPE)
+set(nacl_SRC_DIR "${CMAKE_SOURCE_DIR}/Source/native_client/src")
 
-SET(nacl_INCLUDE_DIRECTORIES "${nacl_SRC_DIR}/include/")
-SET(nacl_INCLUDE_DIRECTORIES ${nacl_INCLUDE_DIRECTORIES} PARENT_SCOPE)
+set(nacl_INCLUDE_DIRECTORIES "${nacl_SRC_DIR}/include/")
+set(nacl_INCLUDE_DIRECTORIES ${nacl_INCLUDE_DIRECTORIES} PARENT_SCOPE)
 
 INCLUDE(${nacl_SRC_DIR}/../common.txt)
 
-SET(nacl_SOURCES
+set(nacl_SOURCES
     ${nacl_SRC_DIR}/shared/gio/gio.h
     ${nacl_SRC_DIR}/shared/gio/gio.c
     ${nacl_SRC_DIR}/shared/gio/gio_mem.c
@@ -154,8 +154,9 @@ SET(nacl_SOURCES
     ${nacl_SRC_DIR}/trusted/platform_qualify/linux/nacl_os_qualify.c
     ${nacl_SRC_DIR}/trusted/platform_qualify/linux/sysv_shm_and_mmap.h
     ${nacl_SRC_DIR}/trusted/platform_qualify/linux/sysv_shm_and_mmap.c
-    ${nacl_SRC_DIR}/trusted/platform_qualify/arch/x86_64/nacl_dep_qualify_arch.c
     ${nacl_SRC_DIR}/trusted/platform_qualify/posix/nacl_dep_qualify.c
+
+    ${nacl_SRC_DIR}/trusted/manifest_name_service_proxy/manifest_proxy.c
 
     ${nacl_SRC_DIR}/trusted/nacl_base/nacl_refcount.h
     ${nacl_SRC_DIR}/trusted/nacl_base/nacl_refcount.c
@@ -278,8 +279,6 @@ SET(nacl_SOURCES
 
 set(VALIDATOR_X86_SOURCES
     ${nacl_SRC_DIR}/trusted/cpu_features/arch/x86/cpu_x86.c
-    ${nacl_SRC_DIR}/trusted/validator/x86/64/ncvalidate.c
-    ${nacl_SRC_DIR}/trusted/validator/x86/64/ncvalidate_verbose.c
     ${nacl_SRC_DIR}/trusted/validator/x86/error_reporter.c
     ${nacl_SRC_DIR}/trusted/validator/x86/error_reporter_verbose.c
     ${nacl_SRC_DIR}/trusted/validator/x86/halt_trim.c
@@ -312,25 +311,41 @@ set(VALIDATOR_X86_SOURCES
     ${nacl_SRC_DIR}/trusted/validator/x86/ncval_reg_sfi/ncvalidate_iter_detailed.c
     ${nacl_SRC_DIR}/trusted/validator/x86/ncval_reg_sfi/ncvalidate_iter_verbose.c
     ${nacl_SRC_DIR}/trusted/validator/x86/ncval_reg_sfi/ncvalidate_utils.c
+    ${nacl_SRC_DIR}/trusted/validator_x86/nccopycode.c
+    #${nacl_SRC_DIR}/trusted/validator_x86/ncdis.c
+    #${nacl_SRC_DIR}/trusted/validator_x86/ncdis_decode_tables.c
+    #${nacl_SRC_DIR}/trusted/validator_x86/ncdis_segments.c
+    #${nacl_SRC_DIR}/trusted/validator_x86/ncenuminsts_x86_32.c
+    #${nacl_SRC_DIR}/trusted/validator_x86/ncenuminsts_x86_64.c
+    #${nacl_SRC_DIR}/trusted/validator_x86/nc_read_segment.c
+    #${nacl_SRC_DIR}/trusted/validator_x86/ncval.c
 )
 
 if (${TARGET_ARCH} STREQUAL "x86_64")
     set(ASM_S_INPUT_FILES 
         ${NATIVE_CLIENT_DIR}/src/trusted/cpu_features/arch/x86/cpu_xgetbv
+        ${NATIVE_CLIENT_DIR}/src/trusted/validator_x86/nccopycode_stores
     )
     list(APPEND nacl_SOURCES
         ${VALIDATOR_X86_SOURCES}
         ${nacl_SRC_DIR}/trusted/validator/x86/64/ncvalidate.c
         ${nacl_SRC_DIR}/trusted/validator/x86/64/ncvalidate_verbose.c
+        ${nacl_SRC_DIR}/trusted/platform_qualify/arch/x86/nacl_cpuwhitelist.c
+        ${nacl_SRC_DIR}/trusted/platform_qualify/arch/x86/vcpuid.c
+        ${nacl_SRC_DIR}/trusted/platform_qualify/arch/x86_64/nacl_dep_qualify_arch.c
     )
 elseif (${TARGET_ARCH} STREQUAL "i386")
     set(ASM_S_INPUT_FILES 
         ${NATIVE_CLIENT_DIR}/src/trusted/cpu_features/arch/x86/cpu_xgetbv
+        ${NATIVE_CLIENT_DIR}/src/trusted/validator_x86/nccopycode_stores
     )
     list(APPEND nacl_SOURCES
         ${VALIDATOR_X86_SOURCES}
         ${nacl_SRC_DIR}/trusted/validator/x86/32/ncvalidate.c
         ${nacl_SRC_DIR}/trusted/validator/x86/32/ncvalidate_verbose.c
+        ${nacl_SRC_DIR}/trusted/platform_qualify/arch/x86/nacl_cpuwhitelist.c
+        ${nacl_SRC_DIR}/trusted/platform_qualify/arch/x86/vcpuid.c
+        ${nacl_SRC_DIR}/trusted/platform_qualify/arch/x86_32/nacl_dep_qualify_arch.c
     )
 elseif (${TARGET_ARCH} MATCHES "^arm*")
     list(APPEND nacl_SOURCES
@@ -344,21 +359,19 @@ elseif (${TARGET_ARCH} MATCHES "^arm*")
         ${nacl_SRC_DIR}/trusted/validator_arm/gen/arm32_decode_actuals_1.cc
         ${nacl_SRC_DIR}/trusted/validator_arm/gen/arm32_decode_actuals_2.cc
         ${nacl_SRC_DIR}/trusted/validator_arm/ncvalidate.cc
+        ${nacl_SRC_DIR}/trusted/platform_qualify/arch/arm/nacl_dep_qualify_arch.c
+        ${nacl_SRC_DIR}/trusted/platform_qualify/arch/arm/nacl_qualify_fpu.c
     )
 endif ()
 
-SET(NACL_LINUX 1)
-SET(NACL_OSX 0)
-SET(NACL_WINDOWS 0)
 
-#ADD_DEFINITIONS(-D__native_client__)
-#ADD_DEFINITIONS(-D__LITTLE_ENDIAN__)
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fno-strict-aliasing -Wno-missing-field-initializers -Wextra")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-strict-aliasing -Wno-missing-field-initializers -Wextra")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -idirafter ${CMAKE_SOURCE_DIR}/Source/native_client/src/trusted/service_runtime/include")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -idirafter ${CMAKE_SOURCE_DIR}/Source/native_client/src/trusted/service_runtime/include")
 
-SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fno-strict-aliasing -Wno-missing-field-initializers -Wextra")
-#SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ifany...")
-SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -idirafter ${CMAKE_SOURCE_DIR}/Source/native_client/src/trusted/service_runtime/include")
-
-add_custom_target(asm_cpu_precompile)
+# Add asm sources
+add_custom_target(asm_precompile)
 foreach (ASM_S ${ASM_S_INPUT_FILES})
     add_custom_command(
         OUTPUT ${ASM_S}.s
@@ -367,19 +380,19 @@ foreach (ASM_S ${ASM_S_INPUT_FILES})
         DEPENDS ${ASM_S}.S
     )
     list(APPEND ASM_s_SOURCES ${ASM_S}.s)
-    add_dependencies(asm_cpu_precompile ${ASM_S}.s)
+    add_dependencies(asm_precompile ${ASM_S}.s)
 endforeach ()
 
 enable_language(ASM-ATT)
-add_library(${NACLASM_CPU_LIBRARY_NAME} STATIC ${ASM_s_SOURCES})
-add_dependencies(${NACLASM_CPU_LIBRARY_NAME} asm_cpu_precompile)
+add_library(${NACLASM_LIBRARY_NAME} STATIC ${ASM_s_SOURCES})
+add_dependencies(${NACLASM_LIBRARY_NAME} asm_precompile)
 
-INCLUDE_DIRECTORIES(
+include_directories(
     ${CMAKE_SOURCE_DIR}/Source
     ${nacl_INCLUDE_DIRECTORIES}
 )
-ADD_LIBRARY(${nacl_LIBRARY_NAME} SHARED ${nacl_SOURCES})
-SET_TARGET_PROPERTIES(${nacl_LIBRARY_NAME} PROPERTIES VERSION ${PROJECT_VERSION} SOVERSION ${PROJECT_VERSION_MAJOR})
-target_link_libraries(${nacl_LIBRARY_NAME} ${NACLASM_CPU_LIBRARY_NAME} ${NACL_SEL_LIBRARY_NAME})
+add_library(${nacl_LIBRARY_NAME} STATIC ${nacl_SOURCES})
+set_target_properties(${nacl_LIBRARY_NAME} PROPERTIES VERSION ${PROJECT_VERSION} SOVERSION ${PROJECT_VERSION_MAJOR} COMPILE_FLAGS "-fPIC")
+target_link_libraries(${nacl_LIBRARY_NAME} ${NACLASM_LIBRARY_NAME} ${NACL_SEL_LIBRARY_NAME})
 
-INSTALL(TARGETS ${nacl_LIBRARY_NAME} DESTINATION "${LIB_INSTALL_DIR}")
+install(TARGETS ${nacl_LIBRARY_NAME} DESTINATION "${LIB_INSTALL_DIR}")

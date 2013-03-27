@@ -21,7 +21,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <assert.h>
 
 #include "native_client/src/shared/gio/gio.h"
 #include "native_client/src/shared/imc/nacl_imc_c.h"
@@ -277,8 +276,7 @@ int NaClSelLdrMain(int argc, char **argv) {
         break;
 #if NACL_LINUX
       case 'D':
-        assert(0);
-        //NaClHandleRDebug(optarg, argv[0]);
+        NaClHandleRDebug(optarg, argv[0]);
         break;
 #endif
       case 'e':
@@ -681,8 +679,7 @@ int NaClSelLdrMain(int argc, char **argv) {
        * allocating segment selectors.  On x86-64 and ARM, this is
        * (currently) a no-op.
        */
-      //errcode = NaClAppPrepareToLaunch(nap);
-      errcode = LOAD_STATUS_UNKNOWN; //FIXME
+      errcode = NaClAppPrepareToLaunch(nap);
       if (LOAD_OK != errcode) {
         nap->module_load_status = errcode;
         fprintf(stderr, "NaClAppPrepareToLaunch returned %d", errcode);

@@ -21,7 +21,7 @@ EXTERN_C_BEGIN
 /* Return 1 if CPU is whitelisted */
 int NaCl_ThisCPUIsWhitelisted(void);
 /* Return 1 if CPU is blacklisted */
-//int NaCl_ThisCPUIsBlacklisted(void);
+int NaCl_ThisCPUIsBlacklisted(void);
 
 /* Return 1 if list is well-structured. */
 int NaCl_VerifyBlacklist(void);

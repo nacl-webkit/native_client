@@ -21,7 +21,7 @@ struct NaClAppThread;
 struct NaClSignalContext;
 struct NaClSwitchRemainingRegsState;
 
-//void NaClInitSwitchToApp(struct NaClApp *nap);
+void NaClInitSwitchToApp(struct NaClApp *nap);
 
 #if NACL_ARCH(NACL_BUILD_ARCH) == NACL_x86
 extern NORETURN void NaClSwitchAVX(struct NaClThreadContext *context);

@@ -9,7 +9,6 @@
  */
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <assert.h>
 
 #include <stdio.h>
 
@@ -49,7 +48,7 @@
 #include "native_client/src/trusted/service_runtime/nacl_signal.h"
 #include "native_client/src/trusted/service_runtime/nacl_syscall_handlers.h"
 #include "native_client/src/trusted/service_runtime/nacl_thread_nice.h"
-//#include "native_client/src/trusted/service_runtime/nacl_tls.h"
+#include "native_client/src/trusted/service_runtime/nacl_tls.h"
 #include "native_client/src/trusted/service_runtime/sel_ldr.h"
 #include "native_client/src/trusted/service_runtime/sel_memory.h"
 #include "native_client/src/trusted/service_runtime/win/debug_exception_handler.h"
@@ -361,8 +360,7 @@ int32_t NaClCommonSysExit(struct NaClAppThread  *natp,
 
   (void) NaClReportExitStatus(nap, NACL_ABI_W_EXITCODE(status, 0));
 
-  assert(0);
-  //NaClAppThreadTeardown(natp);
+  NaClAppThreadTeardown(natp);
   /* NOTREACHED */
   return -NACL_ABI_EINVAL;
 }
@@ -393,8 +391,7 @@ int32_t NaClCommonSysThreadExit(struct NaClAppThread  *natp,
     }
   }
 
-  assert(0);
-  //NaClAppThreadTeardown(natp);
+  NaClAppThreadTeardown(natp);
   /* NOTREACHED */
   return -NACL_ABI_EINVAL;
 }
@@ -2432,7 +2429,7 @@ int32_t NaClCommonSysTls_Init(struct NaClAppThread  *natp,
     goto cleanup;
   }
 
-  //NaClTlsSetTlsValue1(natp, thread_ptr);
+  NaClTlsSetTlsValue1(natp, thread_ptr);
   retval = 0;
 cleanup:
   return retval;
@@ -2494,15 +2491,12 @@ cleanup:
  * NaClGetTlsFastPath1 (see nacl_syscall_64.S).
  */
 int32_t NaClCommonSysTlsGet(struct NaClAppThread *natp) {
-  assert(0);
-  return 0;
-  //return NaClTlsGetTlsValue1(natp);
+  return NaClTlsGetTlsValue1(natp);
 }
 
 int32_t NaClSysSecond_Tls_Set(struct NaClAppThread *natp,
                               uint32_t             new_value) {
-  assert(0);
-  //NaClTlsSetTlsValue2(natp, new_value);
+  NaClTlsSetTlsValue2(natp, new_value);
   return 0;
 }
 
@@ -2511,9 +2505,7 @@ int32_t NaClSysSecond_Tls_Set(struct NaClAppThread *natp,
  * NaClGetTlsFastPath2 (see nacl_syscall_64.S).
  */
 int32_t NaClSysSecond_Tls_Get(struct NaClAppThread *natp) {
-  assert(0);
-  return 0;
-//  return NaClTlsGetTlsValue2(natp);
+  return NaClTlsGetTlsValue2(natp);
 }
 
 int NaClCommonSysThread_Nice(struct NaClAppThread *natp,

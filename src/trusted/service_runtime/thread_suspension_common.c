@@ -5,7 +5,6 @@
  */
 
 #include <string.h>
-#include <assert.h>
 
 #include "native_client/src/include/portability_io.h"
 #include "native_client/src/shared/platform/nacl_sync_checked.h"
@@ -52,8 +51,7 @@ void NaClAppThreadGetSuspendedRegisters(struct NaClAppThread *natp,
   if ((natp->suspend_state & NACL_APP_THREAD_UNTRUSTED) != 0) {
     NaClAppThreadGetSuspendedRegistersInternal(natp, regs);
   } else {
-    assert(0);
-    //NaClThreadContextToSignalContext(&natp->user, regs);
+    NaClThreadContextToSignalContext(&natp->user, regs);
   }
 }
 

@@ -5,7 +5,6 @@
  */
 
 #include <string.h>
-#include <assert.h>
 
 /*
  * NaCl Simple/secure ELF loader (NaCl SEL).
@@ -434,10 +433,9 @@ void  NaClLoadTrampoline(struct NaClApp *nap) {
   }
 #endif
 #if NACL_ARCH(NACL_BUILD_ARCH) == NACL_x86 && NACL_BUILD_SUBARCH == 64
-  assert(0);
-  //if (!NaClMakeDispatchThunk(nap)) {
-  //  NaClLog(LOG_FATAL, "NaClMakeDispatchThunk failed!\n");
-  //}
+  if (!NaClMakeDispatchThunk(nap)) {
+    NaClLog(LOG_FATAL, "NaClMakeDispatchThunk failed!\n");
+  }
 #endif
   NaClFillTrampolineRegion(nap);
 
@@ -1097,8 +1095,7 @@ static void NaClLoadModuleRpc(struct NaClSrpcRpc      *rpc,
   /*
    * Finish setting up the NaCl App.
    */
-  //suberr = NaClAppPrepareToLaunch(nap);
-  assert(0);
+  suberr = NaClAppPrepareToLaunch(nap);
 
   NaClXMutexLock(&nap->mu);
 

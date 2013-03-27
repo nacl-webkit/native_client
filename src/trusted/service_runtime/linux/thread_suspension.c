@@ -9,7 +9,6 @@
 #include <linux/futex.h>
 #include <signal.h>
 #include <sys/syscall.h>
-#include <assert.h>
 
 #include "native_client/src/include/concurrency_ops.h"
 #include "native_client/src/shared/platform/nacl_check.h"
@@ -83,8 +82,7 @@ void NaClAppThreadSetSuspendState(struct NaClAppThread *natp,
 }
 
 static void HandleSuspendSignal(struct NaClSignalContext *regs) {
-  assert(0);
-  uint32_t tls_idx = 0; //FIXME: NaClTlsGetIdx();
+  uint32_t tls_idx = NaClTlsGetIdx();
   struct NaClAppThread *natp = nacl_thread[tls_idx];
   struct NaClSignalContext *suspended_registers =
       &natp->suspended_registers->context;

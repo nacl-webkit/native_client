@@ -78,8 +78,8 @@ NaClErrorCode NaClMemoryProtection(struct NaClApp *nap) NACL_WUR;
  *
  * Returns LOAD_OK on success.
  */
-//NaClErrorCode NaClAllocateSpaceAslr(void **mem, size_t addrsp_size,
-//                                    enum NaClAslrMode aslr_mode) NACL_WUR;
+NaClErrorCode NaClAllocateSpaceAslr(void **mem, size_t addrsp_size,
+                                    enum NaClAslrMode aslr_mode) NACL_WUR;
 
 /*
  * Old interface.  Invokes NaClAllocateSpaceAslr with aslr_mode =

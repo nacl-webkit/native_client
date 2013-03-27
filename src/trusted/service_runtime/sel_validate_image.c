@@ -4,7 +4,6 @@
  * found in the LICENSE file.
  */
 
-#include <assert.h>
 #include "native_client/src/include/concurrency_ops.h"
 #include "native_client/src/shared/platform/nacl_log.h"
 #include "native_client/src/shared/utils/types.h"
@@ -114,23 +113,21 @@ int NaClCopyCode(struct NaClApp *nap, uintptr_t guest_addr,
   if (nap->fixed_feature_cpu_mode) {
     return LOAD_BAD_FILE;
   }
-  assert(0);
-  return 0;
-//FIXME:  status = NaClValidateStatus(nap->validator->CopyCode(
-//FIXME:                              guest_addr, data_old, data_new, size,
-//FIXME:                              nap->cpu_features,
-//FIXME:                              NaClCopyInstruction));
-//FIXME:  /*
-//FIXME:   * Flush the processor's instruction cache.  This is not necessary
-//FIXME:   * for security, because any old cached instructions will just be
-//FIXME:   * safe halt instructions.  It is only necessary to ensure that
-//FIXME:   * untrusted code runs correctly when it tries to execute the
-//FIXME:   * dynamically-loaded code.
-//FIXME:   */
-//FIXME:  NaClFlushCacheForDoublyMappedCode(data_old,
-//FIXME:                                    (uint8_t *) guest_addr,
-//FIXME:                                    size);
-//FIXME:  return status;
+  status = NaClValidateStatus(nap->validator->CopyCode(
+                              guest_addr, data_old, data_new, size,
+                              nap->cpu_features,
+                              NaClCopyInstruction));
+  /*
+   * Flush the processor's instruction cache.  This is not necessary
+   * for security, because any old cached instructions will just be
+   * safe halt instructions.  It is only necessary to ensure that
+   * untrusted code runs correctly when it tries to execute the
+   * dynamically-loaded code.
+   */
+  NaClFlushCacheForDoublyMappedCode(data_old,
+                                    (uint8_t *) guest_addr,
+                                    size);
+  return status;
 }
 
 NaClErrorCode NaClValidateImage(struct NaClApp  *nap) {

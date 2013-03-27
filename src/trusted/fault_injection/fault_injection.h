@@ -79,7 +79,6 @@
 #include "native_client/src/include/nacl_base.h"
 #include "native_client/src/include/portability.h"
 
-#include <assert.h>
 EXTERN_C_BEGIN
 
 /*
@@ -88,14 +87,14 @@ EXTERN_C_BEGIN
  * Must be called before going multithreaded.  Idempotent: repeated
  * calls ignored.
  */
-//void NaClFaultInjectionModuleInit(void);
+//FIXME void NaClFaultInjectionModuleInit(void);
 
 /*
  * Private functions, to be used only by the macros below.  Not stable
  * ABI; may change.
  */
-//int NaClFaultInjectionFaultP(char const *site_name);
-//uintptr_t NaClFaultInjectionValue(void);
+//FIXME int NaClFaultInjectionFaultP(char const *site_name);
+//FIXME uintptr_t NaClFaultInjectionValue(void);
 #define NaClFaultInjectionFaultP(a) (void*)(a)
 #define NaClFaultInjectionValue() 0
 
@@ -107,13 +106,13 @@ EXTERN_C_BEGIN
  * function, so sans deeper integration with threading libraries
  * (e.g. platform), we cannot do the cleanup automatically.
  */
-//void NaClFaultInjectionPreThreadExitCleanup(void);
+//FIXME void NaClFaultInjectionPreThreadExitCleanup(void);
 
 /*
  * Private test functions.
  */
-//void NaClFaultInjectionModuleInternalInit(void);
-//void NaClFaultInjectionModuleInternalFini(void);
+//FIXME void NaClFaultInjectionModuleInternalInit(void);
+//FIXME void NaClFaultInjectionModuleInternalFini(void);
 
 
 /*
@@ -157,14 +156,16 @@ EXTERN_C_BEGIN
  * triggers.
  */
 #define NACL_FI_ERROR_COND(site_name, expr)     \
-  (NACL_FI(site_name, expr, 1))
+    (expr)
+//FIXME  (NACL_FI(site_name, expr, 1))
 
 #define NACL_FI_FATAL(site_name)                                      \
   do {                                                                \
     if (NACL_FI(site_name, 0, 1)) {                                   \
-      NaClLog(LOG_FATAL, "NaCl Fault Injection: at %s\n", site_name); \
+      NaClLog(LOG_INFO, "NaCl Fault Injection: at %s\n", site_name); \
     }                                                                 \
   } while (0)
+//FIXME      NaClLog(LOG_FATAL, "NaCl Fault Injection: at %s\n", site_name); \
 
 /*
  * NaClErrorCode = NACL_FI_VAL("load_module", NaClErrorCode,
