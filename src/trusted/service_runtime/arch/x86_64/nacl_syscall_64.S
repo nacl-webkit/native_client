@@ -138,7 +138,7 @@ DEFINE_GLOBAL_HIDDEN_IDENTIFIER(NaClSyscallSeg):
 
         get_tls
 
-        leaq    IDENTIFIER(nacl_user)(%rip), %rdx
+        leaq    nacl_user@GOTPCREL(%rip), %rdx
         leaq    (%rdx,%rax,8), %rdx
         movq    0x0(%rdx), %rdx
         /*
@@ -209,7 +209,7 @@ DEFINE_GLOBAL_HIDDEN_IDENTIFIER(NaClSyscallThreadCaptureFault):
 #if NACL_WINDOWS
         jmp     IDENTIFIER(NaClSyscallCSegHook)
 #else
-        call    IDENTIFIER(NaClSyscallCSegHook)
+        call    NaClSyscallCSegHook@PLT
         hlt
         /* noret */
 #endif
@@ -230,7 +230,7 @@ DEFINE_GLOBAL_HIDDEN_IDENTIFIER(NaClSyscallThreadCaptureFault):
 MACRO(tls_syscall)
 MACROENTRY
         get_tls
-        leaq    IDENTIFIER(nacl_user)(%rip), %rdx
+        leaq    nacl_user@GOTPCREL(%rip), %rdx
         movq    (%rdx,%rax,8), %rdx
         movl    MACROARG2(%rdx), %eax
         /* sandbox the return, straight off the untrusted stack */
