@@ -177,52 +177,19 @@ set(nacl_SOURCES
     ${nacl_SRC_DIR}/trusted/reverse_service/reverse_service_c.c
     ${nacl_SRC_DIR}/trusted/reverse_service/reverse_service.cc
 
-    ${nacl_SRC_DIR}/trusted/service_runtime/dyn_array.c
-    ${nacl_SRC_DIR}/trusted/service_runtime/elf_util.c
-    ${nacl_SRC_DIR}/trusted/service_runtime/env_cleanser.c
-    ${nacl_SRC_DIR}/trusted/service_runtime/generic/vm_hole.c
     ${nacl_SRC_DIR}/trusted/service_runtime/linux/nacl_bootstrap_args.c
     ${nacl_SRC_DIR}/trusted/service_runtime/linux/nacl_thread_nice.c
 #    ${nacl_SRC_DIR}/trusted/service_runtime/linux/r_debug.c
     ${nacl_SRC_DIR}/trusted/service_runtime/linux/reserved_at_zero.c
     ${nacl_SRC_DIR}/trusted/service_runtime/linux/thread_suspension.c
     ${nacl_SRC_DIR}/trusted/service_runtime/linux/x86/nacl_ldt.c
-    ${nacl_SRC_DIR}/trusted/service_runtime/nacl_all_modules.c
-    #${nacl_SRC_DIR}/trusted/service_runtime/nacl_app_thread.c // thread is platform specific
-    ${nacl_SRC_DIR}/trusted/service_runtime/nacl_bootstrap_channel_error_reporter.c
-    ${nacl_SRC_DIR}/trusted/service_runtime/nacl_copy.c
-    ${nacl_SRC_DIR}/trusted/service_runtime/nacl_desc_effector_ldr.c
-    ${nacl_SRC_DIR}/trusted/service_runtime/nacl_desc_postmessage.c
-    ${nacl_SRC_DIR}/trusted/service_runtime/nacl_error_code.c
-    ${nacl_SRC_DIR}/trusted/service_runtime/nacl_error_gio.c
-    ${nacl_SRC_DIR}/trusted/service_runtime/nacl_error_log_hook.c
-    ${nacl_SRC_DIR}/trusted/service_runtime/nacl_globals.c
-    ${nacl_SRC_DIR}/trusted/service_runtime/nacl_kernel_service.c
-    ${nacl_SRC_DIR}/trusted/service_runtime/nacl_resource.c
-    ${nacl_SRC_DIR}/trusted/service_runtime/nacl_reverse_quota_interface.c
-    ${nacl_SRC_DIR}/trusted/service_runtime/nacl_secure_service.c
-    ${nacl_SRC_DIR}/trusted/service_runtime/nacl_signal_common.c
-    ${nacl_SRC_DIR}/trusted/service_runtime/nacl_stack_safety.c
-    ${nacl_SRC_DIR}/trusted/service_runtime/nacl_syscall_common.c
+    # FIXME: Dup nacl_syscall_hook.c, otherwise libnaclasm_service_runtime.a will link error on NaClSyscallCSegHook
     ${nacl_SRC_DIR}/trusted/service_runtime/nacl_syscall_hook.c
-    ${nacl_SRC_DIR}/trusted/service_runtime/nacl_text.c
-    ${nacl_SRC_DIR}/trusted/service_runtime/nacl_valgrind_hooks.c
-    ${nacl_SRC_DIR}/trusted/service_runtime/name_service/default_name_service.c
-    ${nacl_SRC_DIR}/trusted/service_runtime/name_service/name_service.c
     ${nacl_SRC_DIR}/trusted/service_runtime/posix/addrspace_teardown.c
     ${nacl_SRC_DIR}/trusted/service_runtime/posix/nacl_signal.c
     ${nacl_SRC_DIR}/trusted/service_runtime/posix/sel_addrspace_posix.c
     ${nacl_SRC_DIR}/trusted/service_runtime/posix/sel_memory.c
     ${nacl_SRC_DIR}/trusted/service_runtime/posix/x86/sel_segments.c
-    ${nacl_SRC_DIR}/trusted/service_runtime/sel_addrspace.c
-    ${nacl_SRC_DIR}/trusted/service_runtime/sel_ldr.c
-    ${nacl_SRC_DIR}/trusted/service_runtime/sel_ldr_standard.c
-    ${nacl_SRC_DIR}/trusted/service_runtime/sel_ldr_thread_interface.c
-    ${nacl_SRC_DIR}/trusted/service_runtime/sel_main_chrome.c
-    ${nacl_SRC_DIR}/trusted/service_runtime/sel_mem.c
-    ${nacl_SRC_DIR}/trusted/service_runtime/sel_qualify.c
-    ${nacl_SRC_DIR}/trusted/service_runtime/sel_validate_image.c
-    ${nacl_SRC_DIR}/trusted/service_runtime/thread_suspension_common.c
 
     ${nacl_SRC_DIR}/trusted/simple_service/nacl_simple_ltd_service.h
     ${nacl_SRC_DIR}/trusted/simple_service/nacl_simple_ltd_service.c
@@ -389,12 +356,17 @@ enable_language(ASM-ATT)
 add_library(${NACLASM_LIBRARY_NAME} STATIC ${ASM_s_SOURCES})
 add_dependencies(${NACLASM_LIBRARY_NAME} asm_precompile)
 
+set(nacl_LIBRARIES
+  ${NACLASM_LIBRARY_NAME}
+  ${NACL_SEL_LIBRARY_NAME}
+)
+
 include_directories(
     ${CMAKE_SOURCE_DIR}/Source
     ${nacl_INCLUDE_DIRECTORIES}
 )
 add_library(${nacl_LIBRARY_NAME} STATIC ${nacl_SOURCES})
 set_target_properties(${nacl_LIBRARY_NAME} PROPERTIES VERSION ${PROJECT_VERSION} SOVERSION ${PROJECT_VERSION_MAJOR} COMPILE_FLAGS "-fPIC")
-target_link_libraries(${nacl_LIBRARY_NAME} ${NACLASM_LIBRARY_NAME} ${NACL_SEL_LIBRARY_NAME})
+target_link_libraries(${nacl_LIBRARY_NAME} ${nacl_LIBRARIES})
 
 install(TARGETS ${nacl_LIBRARY_NAME} DESTINATION "${LIB_INSTALL_DIR}")
