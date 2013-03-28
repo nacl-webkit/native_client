@@ -3,8 +3,6 @@ set(NACL_BOOTSTRAP_MUNGE_PHDR_NAME nacl_bootstrap_munge_phdr)
 set(NACL_BOOTSTRAP_RAW nacl_bootstrap_raw)
 set(NACL_HELPER_BOOTSTRAP nacl_helper_bootstrap)
 
-include(${NATIVE_CLIENT_DIR}/common.txt)
-
 include_directories("${CMAKE_SOURCE_DIR}/Source/chrome_deps")
 add_library(${NACL_BOOTSTRAP_LIBRARY_NAME} STATIC "nacl_bootstrap.c")
 set_target_properties(${NACL_BOOTSTRAP_LIBRARY_NAME}

@@ -45,8 +45,6 @@ set(NACL_SEL_LIBRARY_SOURCES
     ${NATIVE_CLIENT_DIR}/src/trusted/validator/validator_init.c
 )
 
-include(${NATIVE_CLIENT_DIR}/common.txt)
-
 if (${TARGET_ARCH} STREQUAL "x86_64")
     add_definitions(-DNACL_X86_64_ZERO_BASED_SANDBOX=0 -D_GNU_SOURCE=1)
     set(ASM_S_INPUT_FILES 

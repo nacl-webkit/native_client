@@ -6,8 +6,6 @@ set(NACLASM_LIBRARY_NAME naclasm)
 set(NACL_ALL_LIBRARY_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/include/")
 set(NACL_ALL_LIBRARY_INCLUDE_DIRECTORIES ${NACL_ALL_LIBRARY_INCLUDE_DIRECTORIES} PARENT_SCOPE)
 
-include(${CMAKE_CURRENT_SOURCE_DIR}/../common.txt)
-
 set(NACL_ALL_LIBRARY_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/shared/gio/gio.h
     ${CMAKE_CURRENT_SOURCE_DIR}/shared/gio/gio.c
@@ -330,7 +328,6 @@ elseif (${TARGET_ARCH} MATCHES "^arm*")
         ${CMAKE_CURRENT_SOURCE_DIR}/trusted/platform_qualify/arch/arm/nacl_qualify_fpu.c
     )
 endif ()
-
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fno-strict-aliasing -Wno-missing-field-initializers -Wextra")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-strict-aliasing -Wno-missing-field-initializers -Wextra")
