@@ -331,8 +331,8 @@ endif ()
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fno-strict-aliasing -Wno-missing-field-initializers -Wextra")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-strict-aliasing -Wno-missing-field-initializers -Wextra")
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -idirafter ${CMAKE_SOURCE_DIR}/Source/native_client/src/trusted/service_runtime/include")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -idirafter ${CMAKE_SOURCE_DIR}/Source/native_client/src/trusted/service_runtime/include")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -idirafter ${NATIVE_CLIENT_DIR}/src/trusted/service_runtime/include")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -idirafter ${NATIVE_CLIENT_DIR}/src/trusted/service_runtime/include")
 
 # Add asm sources
 add_custom_target(asm_precompile)
@@ -357,7 +357,7 @@ set(NACL_ALL_LIBRARIES
 )
 
 include_directories(
-    ${CMAKE_SOURCE_DIR}/Source
+    ${CHROME_DEPS_DIR}
     ${NACL_ALL_LIBRARY_INCLUDE_DIRECTORIES}
 )
 add_library(${NACL_ALL_LIBRARY_NAME} STATIC ${NACL_ALL_LIBRARY_SOURCES})

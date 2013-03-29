@@ -99,7 +99,7 @@ endif ()
 
 set(NACL_SEL_INCLUDE_DIRECTORIES
     ${NATIVE_CLIENT_DIR}/..
-    ${NATIVE_CLIENT_DIR}/src/third_party
+    ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
 # Add asm sources
