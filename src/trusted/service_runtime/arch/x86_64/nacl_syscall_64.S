@@ -139,6 +139,7 @@ DEFINE_GLOBAL_HIDDEN_IDENTIFIER(NaClSyscallSeg):
         get_tls
 
         leaq    nacl_user@GOTPCREL(%rip), %rdx
+        movq    (%rdx), %rdx
         leaq    (%rdx,%rax,8), %rdx
         movq    0x0(%rdx), %rdx
         /*
@@ -231,6 +232,7 @@ MACRO(tls_syscall)
 MACROENTRY
         get_tls
         leaq    nacl_user@GOTPCREL(%rip), %rdx
+        movq    (%rdx), %rdx
         movq    (%rdx,%rax,8), %rdx
         movl    MACROARG2(%rdx), %eax
         /* sandbox the return, straight off the untrusted stack */
