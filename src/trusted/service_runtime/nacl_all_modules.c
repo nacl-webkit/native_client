@@ -19,7 +19,7 @@
 
 void  NaClAllModulesInit(void) {
   NaClNrdAllModulesInit();
-  //NaClFaultInjectionModuleInit();
+  NaClFaultInjectionModuleInit();
   NaClGlobalModuleInit();  /* various global variables */
   NaClStackSafetyInit();
   NaClSrpcModuleInit();

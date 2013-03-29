@@ -32,7 +32,7 @@
 #include "native_client/src/shared/srpc/nacl_srpc.h"
 
 #include "native_client/src/trusted/fault_injection/fault_injection.h"
-//FIXME #include "native_client/src/trusted/fault_injection/test_injection.h"
+#include "native_client/src/trusted/fault_injection/test_injection.h"
 #include "native_client/src/trusted/perf_counter/nacl_perf_counter.h"
 #include "native_client/src/trusted/service_runtime/env_cleanser.h"
 #include "native_client/src/trusted/service_runtime/include/sys/fcntl.h"
@@ -801,7 +801,7 @@ int NaClSelLdrMain(int argc, char **argv) {
       goto done;
     }
   }
-  //FIXME NACL_TEST_INJECTION(BeforeMainThreadLaunches, ());
+  NACL_TEST_INJECTION(BeforeMainThreadLaunches, ());
   if (!NaClCreateMainThread(nap,
                             argc - optind,
                             argv + optind,

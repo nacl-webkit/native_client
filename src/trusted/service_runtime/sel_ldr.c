@@ -29,7 +29,7 @@
 #include "native_client/src/trusted/desc/nacl_desc_io.h"
 #include "native_client/src/trusted/desc/nrd_xfer.h"
 #include "native_client/src/trusted/fault_injection/fault_injection.h"
-//FIXME #include "native_client/src/trusted/fault_injection/test_injection.h"
+#include "native_client/src/trusted/fault_injection/test_injection.h"
 #include "native_client/src/trusted/gio/gio_nacl_desc.h"
 #include "native_client/src/trusted/gio/gio_shm.h"
 #include "native_client/src/trusted/interval_multiset/nacl_interval_range_tree_intern.h"
@@ -482,7 +482,7 @@ void  NaClLoadTrampoline(struct NaClApp *nap) {
                                 NACL_sys_second_tls_get));
 #endif
 
-  //FIXME NACL_TEST_INJECTION(ChangeTrampolines, (nap));
+  NACL_TEST_INJECTION(ChangeTrampolines, (nap));
 }
 
 void  NaClMemRegionPrinter(void                   *state,

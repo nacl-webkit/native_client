@@ -136,6 +136,7 @@ set(NACL_ALL_LIBRARY_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/trusted/desc/posix/nacl_makeboundsock.c
 
     ${CMAKE_CURRENT_SOURCE_DIR}/trusted/fault_injection/fault_injection.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/trusted/fault_injection/test_injection.c
 
     ${CMAKE_CURRENT_SOURCE_DIR}/trusted/interval_multiset/nacl_interval_range_tree.c
     ${CMAKE_CURRENT_SOURCE_DIR}/trusted/interval_multiset/nacl_interval_multiset_delete.c
@@ -175,7 +176,7 @@ set(NACL_ALL_LIBRARY_SOURCES
 
     ${CMAKE_CURRENT_SOURCE_DIR}/trusted/service_runtime/linux/nacl_bootstrap_args.c
     ${CMAKE_CURRENT_SOURCE_DIR}/trusted/service_runtime/linux/nacl_thread_nice.c
-#    ${CMAKE_CURRENT_SOURCE_DIR}/trusted/service_runtime/linux/r_debug.c
+    #${CMAKE_CURRENT_SOURCE_DIR}/trusted/service_runtime/linux/r_debug.c
     ${CMAKE_CURRENT_SOURCE_DIR}/trusted/service_runtime/linux/reserved_at_zero.c
     ${CMAKE_CURRENT_SOURCE_DIR}/trusted/service_runtime/linux/thread_suspension.c
     ${CMAKE_CURRENT_SOURCE_DIR}/trusted/service_runtime/linux/x86/nacl_ldt.c

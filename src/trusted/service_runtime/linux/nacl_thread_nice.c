@@ -18,7 +18,7 @@
 
 static void handle_warning_en(const int en, const char *s) {
   char errs[256];
-  //NaClLog(LOG_WARNING, "%s: %s\n", s, strerror_r(en, errs, sizeof(errs)));
+  NaClLog(LOG_WARNING, "%s: %s\n", s, strerror_r(en, errs, sizeof(errs)));
 }
 
 void NaClThreadNiceInit(void) {
