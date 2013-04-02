@@ -65,17 +65,6 @@ set(NACL_ALL_LIBRARY_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/shared/platform/linux/nacl_host_dir.c
     ${CMAKE_CURRENT_SOURCE_DIR}/shared/platform/linux/nacl_semaphore.c
 
-    ${CMAKE_CURRENT_SOURCE_DIR}/shared/srpc/invoke.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/shared/srpc/module_init_fini.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/shared/srpc/nacl_srpc.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/shared/srpc/nacl_srpc.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/shared/srpc/nacl_srpc_internal.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/shared/srpc/nacl_srpc_message.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/shared/srpc/rpc_log.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/shared/srpc/rpc_serialize.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/shared/srpc/rpc_service.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/shared/srpc/rpc_server_loop.c
-
     ${CMAKE_CURRENT_SOURCE_DIR}/trusted/debug_stub/abi.cc
     ${CMAKE_CURRENT_SOURCE_DIR}/trusted/debug_stub/debug_stub.cc
     ${CMAKE_CURRENT_SOURCE_DIR}/trusted/debug_stub/nacl_debug.cc
@@ -312,6 +301,7 @@ add_dependencies(${NACLASM_LIBRARY_NAME} asm_precompile)
 set(NACL_ALL_LIBRARIES
   ${NACLASM_LIBRARY_NAME}
   ${NACL_SEL_LIBRARY_NAME}
+  nonnacl_srpc
 )
 
 include_directories(
