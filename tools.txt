@@ -20,7 +20,13 @@ add_custom_target(${DOWNLOAD_TOOLCHAIN} ALL
     COMMAND ${PYTHON_EXECUTABLE} ${CHROME_DEPS_DIR}/build/download_nacl_toolchains.py --keep
 )
 
+include(NaclBuildNexe)
+
 if (${TARGET_ARCH} STREQUAL "^arm*")
+
+    set(crt_defines NACL_BUILD_ARCH=arm)
+    message(FATAL_ERROR "Arch $TARGET_ARCH} is unsupportted now!")
+
     add_custom_target(${UNTAR_TOOLCHAIN} ALL
         COMMAND ${PYTHON_EXECUTABLE} ${NATIVE_CLIENT_DIR}/build/untar_toolchain.py --tool x86_newlib --tmp ${SHARED_INTERMEDIATE_DIR}/untar --sdk ${SHARED_INTERMEDIATE_DIR}/sdk --os ${OS} ${TARBALL_DIR}/naclsdk_${OS}_x86.tgz
         COMMAND ${PYTHON_EXECUTABLE} ${NATIVE_CLIENT_DIR}/build/untar_toolchain.py --tool x86_glibc  --tmp ${SHARED_INTERMEDIATE_DIR}/untar --sdk ${SHARED_INTERMEDIATE_DIR}/sdk --os ${OS} ${TARBALL_DIR}/toolchain_${OS}_x86.tar.bz2
@@ -28,47 +34,45 @@ if (${TARGET_ARCH} STREQUAL "^arm*")
         COMMAND ${PYTHON_EXECUTABLE} ${NATIVE_CLIENT_DIR}/build/untar_toolchain.py --tool arm_newlib --tmp ${SHARED_INTERMEDIATE_DIR}/untar --sdk ${SHARED_INTERMEDIATE_DIR}/sdk --os ${OS} ${TARBALL_DIR}/gcc_arm.tgz ${TARBALL_DIR}/binutils_arm.tgz ${TARBALL_DIR}/newlib_arm.tgz ${TARBALL_DIR}/gcc_libs_arm.tgz
         DEPENDS ${DOWNLOAD_TOOLCHAIN}
     )
+
     add_custom_target(${PREP_NACL_SDK} ALL
         COMMAND ${PYTHON_EXECUTABLE} ${NATIVE_CLIENT_DIR}/build/prep_nacl_sdk.py --tool x86_newlib --path ${newlib_dir}
         COMMAND ${PYTHON_EXECUTABLE} ${NATIVE_CLIENT_DIR}/build/prep_nacl_sdk.py --tool x86_glibc  --path ${glibc_dir}
         COMMAND ${PYTHON_EXECUTABLE} ${NATIVE_CLIENT_DIR}/build/prep_nacl_sdk.py --tool arm_newlib --path ${arm_dir}
         DEPENDS ${UNTAR_TOOLCHAIN}
     )
+
     add_custom_target(${PREP_TOOLCHAIN} ALL
        DEPENDS ${UNTAR_TOOLCHAIN} ${PREP_NACL_SDK} ${CRT_INIT_ARM}  ${CRT_FINI_ARM}
     )
+
 else () #x86
+
+    set(crt_defines NACL_BUILD_ARCH=x86)
+
     add_custom_target(${UNTAR_TOOLCHAIN}
         COMMAND ${PYTHON_EXECUTABLE} ${NATIVE_CLIENT_DIR}/build/untar_toolchain.py --tool x86_newlib --tmp ${SHARED_INTERMEDIATE_DIR}/untar --sdk ${SHARED_INTERMEDIATE_DIR}/sdk --os ${OS} ${TARBALL_DIR}/naclsdk_${OS}_x86.tgz
         COMMAND ${PYTHON_EXECUTABLE} ${NATIVE_CLIENT_DIR}/build/untar_toolchain.py --tool x86_glibc --tmp ${SHARED_INTERMEDIATE_DIR}/untar --sdk ${SHARED_INTERMEDIATE_DIR}/sdk --os ${OS} ${TARBALL_DIR}/toolchain_${OS}_x86.tar.bz2
         COMMAND ${PYTHON_EXECUTABLE} ${NATIVE_CLIENT_DIR}/build/untar_toolchain.py --tool x86_pnacl --tmp ${SHARED_INTERMEDIATE_DIR}/untar --sdk ${SHARED_INTERMEDIATE_DIR}/sdk --os ${OS} ${TARBALL_DIR}/naclsdk_pnacl_${OS}_x86.tgz
         DEPENDS ${DOWNLOAD_TOOLCHAIN}
     )
+
     add_custom_target(${PREP_NACL_SDK}
         COMMAND ${PYTHON_EXECUTABLE} ${NATIVE_CLIENT_DIR}/build/prep_nacl_sdk.py --tool x86_newlib --path ${newlib_dir}
         COMMAND ${PYTHON_EXECUTABLE} ${NATIVE_CLIENT_DIR}/build/prep_nacl_sdk.py --tool x86_glibc  --path ${glibc_dir}
         DEPENDS ${UNTAR_TOOLCHAIN}
     )
 
-    include(NaclBuildNexe)
-
-    if (${TARGET_ARCH} MATCHES "^x86_*")
-       set(defines NACL_BUILD_ARCH=x86)
-    elseif (${TARGET_ARCH} MATCHES "^arm*")
-       set(defines NACL_BUILD_ARCH=arm)
-       message(FATAL_ERROR "Arch $TARGET_ARCH} is unsupportted now!")
-    endif ()
-
     set(extra_args --compile --no-suffix --strip=_x86_64)
 
-    nacl_build_nlib(${CRT_INIT_64} "${extra_args}" 64 "${defines}" "" "" "" crti.o ${NATIVE_CLIENT_DIR}/src/untrusted/stubs/crti_x86_64.S)
-    nacl_build_nlib(${CRT_FINI_64} "${extra_args}" 64 "${defines}" "" "" "" crtn.o ${NATIVE_CLIENT_DIR}/src/untrusted/stubs/crtn_x86_64.S)
+    nacl_build_nlib(${CRT_INIT_64} "${extra_args}" 64 "${crt_defines}" "" "" "" crti.o ${NATIVE_CLIENT_DIR}/src/untrusted/stubs/crti_x86_64.S)
+    nacl_build_nlib(${CRT_FINI_64} "${extra_args}" 64 "${crt_defines}" "" "" "" crtn.o ${NATIVE_CLIENT_DIR}/src/untrusted/stubs/crtn_x86_64.S)
 
     set(extra_args --compile --no-suffix --strip=_x86_32)
-    nacl_build_nlib(${CRT_INIT_32} "${extra_args}" 32 "${defines}" "" "" "" crti.o ${NATIVE_CLIENT_DIR}/src/untrusted/stubs/crti_x86_32.S)
-    nacl_build_nlib(${CRT_FINI_32} "${extra_args}" 32 "${defines}" "" "" "" crtn.o ${NATIVE_CLIENT_DIR}/src/untrusted/stubs/crtn_x86_32.S)
+    nacl_build_nlib(${CRT_INIT_32} "${extra_args}" 32 "${crt_defines}" "" "" "" crti.o ${NATIVE_CLIENT_DIR}/src/untrusted/stubs/crti_x86_32.S)
+    nacl_build_nlib(${CRT_FINI_32} "${extra_args}" 32 "${crt_defines}" "" "" "" crtn.o ${NATIVE_CLIENT_DIR}/src/untrusted/stubs/crtn_x86_32.S)
 
     add_custom_target(${PREP_TOOLCHAIN}
-        DEPENDS ${extra_deps} build_${CRT_INIT_32} build_${CRT_FINI_32} build_${CRT_INIT_64} build_${CRT_FINI_64}
+        DEPENDS ${UNTAR_TOOLCHAIN} ${PREP_NACL_SDK} build_${CRT_INIT_32} build_${CRT_FINI_32} build_${CRT_INIT_64} build_${CRT_FINI_64}
     )
 endif ()
