@@ -68,3 +68,11 @@ nacl_build_nlib(nacl_lib_newlib_32.a "" 32 "" "${nacl_lib_newlib_include_dirs}" 
 add_custom_target(nacl_lib_newlib ALL
     DEPENDS build_nacl_lib_newlib_64.a build_nacl_lib_newlib_32.a
 )
+
+nacl_build_nlib(libimc_syscalls_64.a "" 64 "" "${nacl_lib_newlib_include_dirs}" "" "" "libimc_syscalls.a" "${sources_for_imc_syscalls}")
+nacl_build_nlib(libimc_syscalls_32.a "" 32 "" "${nacl_lib_newlib_include_dirs}" "" "" "libimc_syscalls.a" "${sources_for_imc_syscalls}")
+
+add_custom_target(imc_syscalls_lib ALL
+    DEPENDS build_libimc_syscalls_64.a build_libimc_syscalls_32.a
+)
+
