@@ -60,18 +60,15 @@ else () #x86
     endif ()
 
     set(extra_args --compile --no-suffix --strip=_x86_64)
-    nacl_build_nlib(${CRT_INIT_64} "${extra_args}" 64 "${defines}" "" crti.o ${NATIVE_CLIENT_DIR}/src/untrusted/stubs/crti_x86_64.S)
-    add_custom_target(${CRT_INIT_64} DEPENDS ${UNTAR_TOOLCHAIN} ${PREP_NACL_SDK} build_${CRT_INIT_64}_64)
-    nacl_build_nlib(${CRT_FINI_64} "${extra_args}" 64 "${defines}" "" crtn.o ${NATIVE_CLIENT_DIR}/src/untrusted/stubs/crtn_x86_64.S)
-    add_custom_target(${CRT_FINI_64} DEPENDS ${UNTAR_TOOLCHAIN} ${PREP_NACL_SDK} build_${CRT_FINI_64}_64)
+
+    nacl_build_nlib(${CRT_INIT_64} "${extra_args}" 64 "${defines}" "" "" "" crti.o ${NATIVE_CLIENT_DIR}/src/untrusted/stubs/crti_x86_64.S)
+    nacl_build_nlib(${CRT_FINI_64} "${extra_args}" 64 "${defines}" "" "" "" crtn.o ${NATIVE_CLIENT_DIR}/src/untrusted/stubs/crtn_x86_64.S)
 
     set(extra_args --compile --no-suffix --strip=_x86_32)
-    nacl_build_nlib(${CRT_INIT_32} "${extra_args}" 32 "${defines}" "" crti.o ${NATIVE_CLIENT_DIR}/src/untrusted/stubs/crti_x86_32.S)
-    add_custom_target(${CRT_INIT_32} DEPENDS ${UNTAR_TOOLCHAIN} ${PREP_NACL_SDK} build_${CRT_INIT_32}_32)
-    nacl_build_nlib(${CRT_FINI_32} "${extra_args}" 32 "${defines}" "" crtn.o ${NATIVE_CLIENT_DIR}/src/untrusted/stubs/crtn_x86_32.S)
-    add_custom_target(${CRT_FINI_32} DEPENDS ${UNTAR_TOOLCHAIN} ${PREP_NACL_SDK} build_${CRT_FINI_32}_32)
+    nacl_build_nlib(${CRT_INIT_32} "${extra_args}" 32 "${defines}" "" "" "" crti.o ${NATIVE_CLIENT_DIR}/src/untrusted/stubs/crti_x86_32.S)
+    nacl_build_nlib(${CRT_FINI_32} "${extra_args}" 32 "${defines}" "" "" "" crtn.o ${NATIVE_CLIENT_DIR}/src/untrusted/stubs/crtn_x86_32.S)
 
     add_custom_target(${PREP_TOOLCHAIN}
-        DEPENDS ${UNTAR_TOOLCHAIN} ${PREP_NACL_SDK} ${CRT_INIT_32} ${CRT_FINI_32} ${CRT_INIT_64} ${CRT_FINI_64}
+        DEPENDS ${extra_deps} build_${CRT_INIT_32} build_${CRT_FINI_32} build_${CRT_INIT_64} build_${CRT_FINI_64}
     )
 endif ()
