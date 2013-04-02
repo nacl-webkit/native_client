@@ -7,63 +7,12 @@ set(NACL_ALL_LIBRARY_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/include/")
 set(NACL_ALL_LIBRARY_INCLUDE_DIRECTORIES ${NACL_ALL_LIBRARY_INCLUDE_DIRECTORIES} PARENT_SCOPE)
 
 set(NACL_ALL_LIBRARY_SOURCES
-    ${CMAKE_CURRENT_SOURCE_DIR}/shared/gio/gio.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/shared/gio/gio.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/shared/gio/gio_mem.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/shared/gio/gprintf.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/shared/gio/gio_mem_snapshot.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/shared/gio/gio_pio.c
-
     ${CMAKE_CURRENT_SOURCE_DIR}/shared/imc/nacl_imc_c.cc
     ${CMAKE_CURRENT_SOURCE_DIR}/shared/imc/nacl_imc_common.cc
     ${CMAKE_CURRENT_SOURCE_DIR}/shared/imc/nacl_imc.h
     ${CMAKE_CURRENT_SOURCE_DIR}/shared/imc/nacl_imc_c.h
     ${CMAKE_CURRENT_SOURCE_DIR}/shared/imc/linux/nacl_imc.cc
     ${CMAKE_CURRENT_SOURCE_DIR}/shared/imc/posix/nacl_imc_posix.cc
-
-    ${CMAKE_CURRENT_SOURCE_DIR}/shared/platform/nacl_check.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/shared/platform/nacl_check.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/shared/platform/nacl_find_addrsp.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/shared/platform/nacl_global_secure_random.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/shared/platform/nacl_global_secure_random.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/shared/platform/nacl_host_dir.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/shared/platform/nacl_host_desc_common.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/shared/platform/nacl_host_desc.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/shared/platform/nacl_interruptible_condvar.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/shared/platform/nacl_interruptible_condvar.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/shared/platform/nacl_interruptible_mutex.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/shared/platform/nacl_interruptible_mutex.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/shared/platform/nacl_log.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/shared/platform/nacl_log.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/shared/platform/nacl_secure_random.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/shared/platform/nacl_secure_random_base.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/shared/platform/nacl_secure_random_common.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/shared/platform/nacl_semaphore.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/shared/platform/nacl_sync.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/shared/platform/nacl_sync_checked.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/shared/platform/nacl_sync_checked.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/shared/platform/nacl_threads.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/shared/platform/nacl_time.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/shared/platform/nacl_time_common.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/shared/platform/nacl_timestamp.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/shared/platform/platform_init.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/shared/platform/refcount_base.cc
-
-    ${CMAKE_CURRENT_SOURCE_DIR}/shared/platform/posix/aligned_malloc.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/shared/platform/posix/condition_variable.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/shared/platform/posix/lock.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/shared/platform/posix/nacl_exit.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/shared/platform/posix/nacl_fast_mutex.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/shared/platform/posix/nacl_find_addrsp.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/shared/platform/posix/nacl_host_desc.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/shared/platform/posix/nacl_secure_random.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/shared/platform/posix/nacl_thread_id.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/shared/platform/posix/nacl_threads.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/shared/platform/posix/nacl_time.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/shared/platform/posix/nacl_timestamp.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/shared/platform/linux/nacl_clock.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/shared/platform/linux/nacl_host_dir.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/shared/platform/linux/nacl_semaphore.c
 
     ${CMAKE_CURRENT_SOURCE_DIR}/trusted/debug_stub/abi.cc
     ${CMAKE_CURRENT_SOURCE_DIR}/trusted/debug_stub/debug_stub.cc
@@ -302,6 +251,8 @@ set(NACL_ALL_LIBRARIES
   ${NACLASM_LIBRARY_NAME}
   ${NACL_SEL_LIBRARY_NAME}
   nonnacl_srpc
+  nacl_shared_platform
+  nacl_shared_gio
 )
 
 include_directories(
