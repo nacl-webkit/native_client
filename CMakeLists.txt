@@ -1,4 +1,5 @@
 add_subdirectory(src)
+add_subdirectory(src/shared/srpc)
 add_subdirectory(src/trusted/service_runtime)
 add_subdirectory(src/trusted/service_runtime/linux)
 add_subdirectory(src/untrusted/irt)
