@@ -198,49 +198,6 @@ set(NACL_ALL_LIBRARY_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/trusted/threading/nacl_thread_interface.c
     ${CMAKE_CURRENT_SOURCE_DIR}/trusted/validator/validator_init.c
     ${CMAKE_CURRENT_SOURCE_DIR}/trusted/weak_ref/weak_ref.cc
-
-    #${CMAKE_CURRENT_SOURCE_DIR}/untrusted/nacl/clock.c
-    #${CMAKE_CURRENT_SOURCE_DIR}/untrusted/nacl/clock_getres.c
-    #${CMAKE_CURRENT_SOURCE_DIR}/untrusted/nacl/clock_gettime.c
-    #${CMAKE_CURRENT_SOURCE_DIR}/untrusted/nacl/close.c
-    #${CMAKE_CURRENT_SOURCE_DIR}/untrusted/nacl/dup.c
-    #${CMAKE_CURRENT_SOURCE_DIR}/untrusted/nacl/_exit.c
-    #${CMAKE_CURRENT_SOURCE_DIR}/untrusted/nacl/fstat.c
-    #${CMAKE_CURRENT_SOURCE_DIR}/untrusted/nacl/getdents.c
-    #${CMAKE_CURRENT_SOURCE_DIR}/untrusted/nacl/getpid.c
-    #${CMAKE_CURRENT_SOURCE_DIR}/untrusted/nacl/gettimeofday.c
-    #${CMAKE_CURRENT_SOURCE_DIR}/untrusted/nacl/lock.c
-    #${CMAKE_CURRENT_SOURCE_DIR}/untrusted/nacl/lseek.c
-    #${CMAKE_CURRENT_SOURCE_DIR}/untrusted/nacl/malloc.c
-    #${CMAKE_CURRENT_SOURCE_DIR}/untrusted/nacl/mmap.c
-    #${CMAKE_CURRENT_SOURCE_DIR}/untrusted/nacl/munmap.c
-    #${CMAKE_CURRENT_SOURCE_DIR}/untrusted/nacl/nanosleep.c
-    #${CMAKE_CURRENT_SOURCE_DIR}/untrusted/nacl/nacl_interface_query.c
-    #${CMAKE_CURRENT_SOURCE_DIR}/untrusted/nacl/nacl_read_tp.c
-    #${CMAKE_CURRENT_SOURCE_DIR}/untrusted/nacl/open.c
-    #${CMAKE_CURRENT_SOURCE_DIR}/untrusted/nacl/read.c
-    #${CMAKE_CURRENT_SOURCE_DIR}/untrusted/nacl/pthread_initialize_minimal.c
-    #${CMAKE_CURRENT_SOURCE_DIR}/untrusted/nacl/pthread_stubs.c
-    #${CMAKE_CURRENT_SOURCE_DIR}/untrusted/nacl/sbrk.c
-    #${CMAKE_CURRENT_SOURCE_DIR}/untrusted/nacl/sched_yield.c
-    #${CMAKE_CURRENT_SOURCE_DIR}/untrusted/nacl/stacktrace.c
-    #${CMAKE_CURRENT_SOURCE_DIR}/untrusted/nacl/start.c
-    #${CMAKE_CURRENT_SOURCE_DIR}/untrusted/nacl/stat.c
-    #${CMAKE_CURRENT_SOURCE_DIR}/untrusted/nacl/sysconf.c
-    #${CMAKE_CURRENT_SOURCE_DIR}/untrusted/nacl/tls.c
-    #${CMAKE_CURRENT_SOURCE_DIR}/untrusted/nacl/write.c
-    #${CMAKE_CURRENT_SOURCE_DIR}/untrusted/nacl/gc_hooks.c
-    #${CMAKE_CURRENT_SOURCE_DIR}/untrusted/nacl/nacl_irt.c
-    #${CMAKE_CURRENT_SOURCE_DIR}/untrusted/nacl/nacl_tls_get.c
-    #${CMAKE_CURRENT_SOURCE_DIR}/untrusted/nacl/nacl_tls_init.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/untrusted/nacl/imc_accept.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/untrusted/nacl/imc_connect.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/untrusted/nacl/imc_makeboundsock.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/untrusted/nacl/imc_mem_obj_create.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/untrusted/nacl/imc_recvmsg.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/untrusted/nacl/imc_sendmsg.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/untrusted/nacl/imc_socketpair.c
-    #${CMAKE_CURRENT_SOURCE_DIR}/untrusted/nacl/nameservice.c
 )
 
 set(VALIDATOR_X86_SOURCES
