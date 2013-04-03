@@ -932,4 +932,5 @@ int32_t NaClCreateAdditionalThread(struct NaClApp *nap,
              "  Returning EAGAIN per POSIX specs.\n"));
     return -NACL_ABI_EAGAIN;
   }
+  return 0;
 }
