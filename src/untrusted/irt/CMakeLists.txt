@@ -63,9 +63,9 @@ set(libirt_browser_link_flags
     -nostartfiles
 )
 
-nacl_build_nlib(libirt_browser_64.a "" 64 "" "${libirt_browser_include_dirs}" "${libirt_browser_link_flags}" "build_nacl_lib_newlib_64.a" "libirt_browser.a" "${libirt_browser_sources}")
-nacl_build_nlib(libirt_browser_32.a "" 32 "" "${libirt_browser_include_dirs}" "${libirt_browser_link_flags}" "build_nacl_lib_newlib_32.a" "libirt_browser.a" "${libirt_browser_sources}")
+nacl_build_nlib(libirt_browser_64.a "" 64 "" "${libirt_browser_include_dirs}" "${libirt_browser_link_flags}" "libirt_browser.a" "${libirt_browser_sources}")
+nacl_build_nlib(libirt_browser_32.a "" 32 "" "${libirt_browser_include_dirs}" "${libirt_browser_link_flags}" "libirt_browser.a" "${libirt_browser_sources}")
 
 add_custom_target(irt_browser_lib ALL
-    DEPENDS build_libirt_browser_64.a build_libirt_browser_32.a
+    DEPENDS nacl_lib_newlib ${NACL_TC_NEWLIB64_DIR}/libirt_browser.a ${NACL_TC_NEWLIB32_DIR}/libirt_browser.a
 )

@@ -45,9 +45,9 @@ set(libsrpc_include_dirs
     ${NATIVE_CLIENT_DIR}/src/third_party
 )
 
-nacl_build_nlib(libsrpc_64.a "" 64 "" "${libsrpc_include_dirs}" "" "" "libsrpc.a" "${libsrpc_sources}")
-nacl_build_nlib(libsrpc_32.a "" 32 "" "${libsrpc_include_dirs}" "" "" "libsrpc.a" "${libsrpc_sources}")
+nacl_build_nlib(libsrpc_64.a "" 64 "" "${libsrpc_include_dirs}" "" "libsrpc.a" "${libsrpc_sources}")
+nacl_build_nlib(libsrpc_32.a "" 32 "" "${libsrpc_include_dirs}" "" "libsrpc.a" "${libsrpc_sources}")
 
 add_custom_target(srpc_lib ALL
-    DEPENDS build_libsrpc_64.a build_libsrpc_32.a
+    DEPENDS ${NACL_TC_NEWLIB64_DIR}/libsrpc.a ${NACL_TC_NEWLIB32_DIR}/libsrpc.a
 )

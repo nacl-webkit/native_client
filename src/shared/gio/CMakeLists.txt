@@ -34,9 +34,9 @@ set(libgio_include_dirs
     ${NATIVE_CLIENT_DIR}/src/third_party
 )
 
-nacl_build_nlib(libgio_64.a "" 64 "" "${libgio_include_dirs}" "" "" "libgio.a" "${common_sources}")
-nacl_build_nlib(libgio_32.a "" 32 "" "${libgio_include_dirs}" "" "" "libgio.a" "${common_sources}")
+nacl_build_nlib(libgio_64.a "" 64 "" "${libgio_include_dirs}" "" "libgio.a" "${common_sources}")
+nacl_build_nlib(libgio_32.a "" 32 "" "${libgio_include_dirs}" "" "libgio.a" "${common_sources}")
 
 add_custom_target(gio_lib ALL
-    DEPENDS build_libgio_64.a build_libgio_32.a
+    DEPENDS ${NACL_TC_NEWLIB64_DIR}/libgio.a ${NACL_TC_NEWLIB32_DIR}/libgio.a
 )

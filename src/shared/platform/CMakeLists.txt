@@ -62,9 +62,9 @@ set(libplatform_include_dirs
     ${NATIVE_CLIENT_DIR}/src/third_party
 )
 
-nacl_build_nlib(libplatform_64.a "" 64 "" "${libplatform_include_dirs}" "" "" "libplatform.a" "${libplatform_sources}")
-nacl_build_nlib(libplatform_32.a "" 32 "" "${libplatform_include_dirs}" "" "" "libplatform.a" "${libplatform_sources}")
+nacl_build_nlib(libplatform_64.a "" 64 "" "${libplatform_include_dirs}" "" "libplatform.a" "${libplatform_sources}")
+nacl_build_nlib(libplatform_32.a "" 32 "" "${libplatform_include_dirs}" "" "libplatform.a" "${libplatform_sources}")
 
 add_custom_target(platform_lib ALL
-    DEPENDS build_libplatform_64.a build_libplatform_32.a
+    DEPENDS ${NACL_TC_NEWLIB64_DIR}/libplatform.a ${NACL_TC_NEWLIB32_DIR}/libplatform.a
 )
