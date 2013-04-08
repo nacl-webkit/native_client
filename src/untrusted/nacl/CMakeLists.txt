@@ -49,6 +49,7 @@ set(sources_for_imc_syscalls
    ${CMAKE_CURRENT_SOURCE_DIR}/imc_sendmsg.c
    ${CMAKE_CURRENT_SOURCE_DIR}/imc_socketpair.c
    ${CMAKE_CURRENT_SOURCE_DIR}/nameservice.c
+   ${CMAKE_CURRENT_SOURCE_DIR}/syscall_bindings_trampoline.h
 )
 
 set(nacl_lib_newlib_sources
